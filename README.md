@@ -14,10 +14,10 @@ Provide   visualizations   of   the   maze   itself,   and   the   final   solut
 
 The   project   should   include   all   the   necessary   build   tasks   to   run   locally,   so   that   we   can   try it   out.
 A   valid   maze   may   contain   the   following   types   of   characters:
-* .    represents   an   open   road
-* #    represents   a   blocked   road
-* A    represents   the   starting   point
-* B    represents   the   destination   point
+* _._    represents   an   open   road
+* _#_    represents   a   blocked   road
+* _A_    represents   the   starting   point
+* _B_    represents   the   destination   point
 
 Anything   outside   the   bounds   of   the   array   should   be   considered   a   wall.   In   addition,   you may   only   move   in   horizontal   or   vertical   directions.   Diagonal   movements   are   not   allowed.
 
