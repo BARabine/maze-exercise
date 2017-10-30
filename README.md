@@ -22,6 +22,7 @@ A   valid   maze   may   contain   the   following   types   of   characters:
 Anything   outside   the   bounds   of   the   array   should   be   considered   a   wall.   In   addition,   you may   only   move   in   horizontal   or   vertical   directions.   Diagonal   movements   are   not   allowed.
 
 Example   input   maze:
+```
 ##########
 #A...#...#
 #.#.##.#.#
@@ -30,8 +31,10 @@ Example   input   maze:
 #.#.##.#.#
 #....#...#
 ##########
+```
 
 Example   simplified   visual   of   the   solution,   using    @    to   represent   the   correct   path.   The shortest   number   of   steps   in   this   case   is   14.   An   ASCII   representation   like   this   is   not recommended   however   for   the   final   solution.
+```
 ##########
 #A@@.#...#
 #.#@##.#.#
@@ -40,6 +43,7 @@ Example   simplified   visual   of   the   solution,   using    @    to   repres
 #.#.##@#@#
 #....#@@@#
 ##########
+```
 
 **Goal**
 Your   solution   should   be   able   to   solve   the   included   mazes    maze1.txt    (pictured   above), maze2.txt ,   and    maze3.txt    correctly.   Each   maze   solution   should   run   in   under   a   minute   on reasonable   hardware.
