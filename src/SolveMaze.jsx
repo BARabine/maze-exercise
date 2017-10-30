@@ -35,10 +35,12 @@ class SolveMaze extends Component {
   }
 
   render() {
-
+    const pathLength = (this.state.mazePath) ? this.state.mazePath.length : 0;
     return getMazeDisplay(
-      getSolutionMaze(this.state.mazeArr, this.state.mazeGraph, this.state.mazePath), 
-      "Solved Maze Here:");
+      getSolutionMaze(this.state.mazeArr, this.state.mazeGraph, this.state.mazePath),
+      "Solved Maze Here:",
+      pathLength,
+    );
 
   }
 

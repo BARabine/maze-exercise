@@ -49,10 +49,13 @@ const MazeRow = ((rowObj) => {
   );
 });
 
-export const getMazeDisplay = ((mazeArr, title) => {
+export const getMazeDisplay = ((mazeArr, title, pathLength=0) => {
   // console.log(`>> MazeArr: ${JSON.stringify(mazeArr)}`);
   if (mazeArr && mazeArr.length > 1) {
     // console.log(`>> MazeArr Length: ${mazeArr.length}`);
+    const plength = (pathLength > 0) ?
+    <div className="show-maze">Shortest path: {pathLength} steps</div> :
+    <div></div>;
     return (
       <div className="maze-display" key="maze-display">
         <div className="maze-display-title" key="maze-display-title">{title}</div>
@@ -61,6 +64,7 @@ export const getMazeDisplay = ((mazeArr, title) => {
             <MazeRow row={oneRow} rowIndex={rowIndex} key={`rowkey${rowIndex}`}/>
           ))}
         </Flexbox>
+        {plength}
       </div>
     );
   }
