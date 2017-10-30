@@ -55,7 +55,6 @@
 
 .maze-container {
   width: 100%;
-  margin-left: 50px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -68,6 +67,7 @@
   float: left;
   width: 25px;
   height: 25px;
+  border: 1px solid grey;
 }
 .maze-box:before {
   content: "";
@@ -77,16 +77,20 @@
 span.maze-box {
   display: inline-flex;
   align-items: center;
+  font-family: monospace;
 }
 .open {
-  background-color: light-grey;
+  background-color: white;
 }
 .block {
-  background-color: black;
+  background-color: red;
 }
 .startpoint {
   background-color: green;
 }
 .endpoint {
-  background-color: blue;
+  background-color: green;
+}
+.path {
+  background-color: yellow;
 }

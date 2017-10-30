@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './App.css';
+import { getMazeDisplay, getSolutionMaze } from './maze-display';
 
 
 class SolveMaze extends Component {
@@ -34,22 +35,11 @@ class SolveMaze extends Component {
   }
 
   render() {
-    let myMaze = (<div></div>);
-    if (this.state.mazeArr) {
-      // Display the maze...(somehow)
-      const maze = this.state.mazeArr;
-      console.log(`>> Array Length: ${maze.length}`);
-      myMaze = [];
-      myMaze.push(<div className="maze-display-title" key="solve-title">Solve Maze Here:</div>);
-      let index = 0;
-      for (let row of maze) {
-        const mKey = `show-row-${index++}`;
-        myMaze.push(<div className="aMaze" key={mKey}>{row}</div>);
-      }
-      myMaze.push(<div key="solve-steps"><br/>Steps from A to B = {this.state.mazePath.length}</div>)
-    }
 
-    return myMaze;
+    return getMazeDisplay(
+      getSolutionMaze(this.state.mazeArr, this.state.mazeGraph, this.state.mazePath), 
+      "Solved Maze Here:");
+
   }
 
 }

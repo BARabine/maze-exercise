@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './App.css';
-// import { getMazeDisplay } from './maze-display';
+import { getMazeDisplay } from './maze-display';
 
 
 class ShowMaze extends Component {
@@ -31,24 +31,7 @@ class ShowMaze extends Component {
   }
 
   render() {
-    //  FIXME -- Figure out how to display the mazeArr??
-    let myMaze = (<div></div>);
-    if (this.state.mazeArr) {
-      // Display the maze...(somehow)
-      const maze = this.state.mazeArr;
-      console.log(`>> Array Length: ${maze.length}`);
-      myMaze = [];
-      myMaze.push(<div className="maze-display-title" key="show-title">Show Maze Here:</div>);
-      let index = 0;
-      for (let row of maze) {
-        const mKey = `show-row-${index++}`;
-        myMaze.push(<div className="aMaze" key={mKey}>{row}</div>);
-      }
-    }
-
-    // const myMaze = getMazeDisplay(this.state.mazeArr);
-
-    return myMaze;
+    return getMazeDisplay(this.state.mazeArr, "Show Maze Here:");
   }
 
 }

@@ -29,7 +29,7 @@ class App extends Component {
 
   processMaze = ((event) => {
     const mazeStr = this.state.mazeStr;
-    console.log(`Inside processMaze! \n${mazeStr}`);
+    // console.log(`Inside processMaze! \n${mazeStr}`);
     const mazeArr = getMazeArray(mazeStr);
     const mazeGraph = buildMazeGraph(mazeArr);
     const mazePath = mazeGraph.getShortestPath();
