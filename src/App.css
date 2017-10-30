@@ -1,0 +1,92 @@
+.App {
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  flex-wrap: wrap;
+  /*justify-content: ;*/
+  margin: 0 30px 20px 30px;
+  /*text-align: center;*/
+}
+
+.App-header {
+  background-color: #222;
+  height: auto;
+  padding: 20px;
+  color: white;
+}
+.App-logo {
+  width: 50%;
+  max-width: 400px;
+}
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+  margin-top: 10px;
+}
+
+.maze-selector {
+  margin: 10px;
+}
+.radio-label {
+  margin-right: 20px;
+}
+
+.aMaze {
+  font-family: monospace;
+}
+
+.maze-display-title {
+  margin: 20px 0 10px;
+}
+
+.button-row {
+  margin-top: 20px;
+}
+.app-button {
+  width: 200px;
+  height: 30px;
+}
+
+.show-maze {
+  margin-top: 30px;
+}
+
+.maze-container {
+  width: 100%;
+  margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.maze-row {
+  display: flex;
+  flex-direction: row;
+}
+.maze-box {
+  float: left;
+  width: 25px;
+  height: 25px;
+}
+.maze-box:before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+span.maze-box {
+  display: inline-flex;
+  align-items: center;
+}
+.open {
+  background-color: light-grey;
+}
+.block {
+  background-color: black;
+}
+.startpoint {
+  background-color: green;
+}
+.endpoint {
+  background-color: blue;
+}
