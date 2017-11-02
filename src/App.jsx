@@ -16,6 +16,7 @@ class App extends Component {
       mazeStr: '',
       mazeArr: null,
       mazeGraph: null,
+      validPath: false,
       mazePath: [],
     }
     this.setMaze = this.setMaze.bind(this);
@@ -32,24 +33,31 @@ class App extends Component {
     // console.log(`Inside processMaze! \n${mazeStr}`);
     const mazeArr = getMazeArray(mazeStr);
     const mazeGraph = buildMazeGraph(mazeArr);
+    const validPath = mazeGraph.hasValidPath();
     const mazePath = mazeGraph.getShortestPath();
-    this.setState({ mazeArr, mazeGraph, mazePath });
+    this.setState({ mazeArr, mazeGraph, validPath, mazePath });
   });
 
   changeMaze = ((event) => {
     // console.log(`Inside changeMaze! ${event.target.value}`);
+    const defaultVals = {
+      mazeArr: null,
+      mazeGraph: null,
+      validPath: false,
+      mazePath: []
+    };
     switch (event.target.value) {
       case 'm1':
-        this.setState({ mazeStr: m1, mazeArr: null, mazeGraph: null });
+        this.setState({ mazeStr: m1, ...defaultVals });
         break;
       case 'm2':
-        this.setState({ mazeStr: m2, mazeArr: null, mazeGraph: null });
+        this.setState({ mazeStr: m2, ...defaultVals });
         break;
       case 'm3':
-        this.setState({ mazeStr: m3, mazeArr: null, mazeGraph: null });
+        this.setState({ mazeStr: m3, ...defaultVals });
         break;
       default:
-        this.setState({ mazeStr: '', mazeArr: null, mazeGraph: null });
+        this.setState({ mazeStr: '', ...defaultVals });
     }
   });
 
@@ -121,6 +129,7 @@ class App extends Component {
           <SolveMaze
             mazeArray={this.state.mazeArr}
             mazeGraph={this.state.mazeGraph}
+            validPath={this.state.validPath}
             mazePath={this.state.mazePath}
           />
         </Flexbox>

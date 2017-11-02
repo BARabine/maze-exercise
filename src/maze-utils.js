@@ -166,9 +166,13 @@ class MazeGraph {
     }
   }
 
-  getShortestPath() {
-    const startId = this.findStartId();
-    const endId = this.findEndId();
+  hasValidPath() {
+    return !!(this.getShortestPath().length > 0);
+  }
+
+  getShortestPath(startId = this.findStartId(), endId = this.findEndId()) {
+    // const startId = this.findStartId();
+    // const endId = this.findEndId();
     // starting at the end, work back to start
     const path = [];
     if (startId && endId) {
@@ -176,6 +180,9 @@ class MazeGraph {
       path.push(id);
       while (id !== startId) {
         id = this.graph[id].prevNode;
+        if (id === null) {
+          return [];
+        }
         path.push(id);
       }
     }

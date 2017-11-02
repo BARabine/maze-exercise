@@ -11,6 +11,7 @@ class SolveMaze extends Component {
     this.state = {
       mazeArr: null,
       mazeGraph: null,
+      validPath: false,
       mazePath: [],
     }
   }
@@ -21,6 +22,7 @@ class SolveMaze extends Component {
       this.setState({
         mazeArr: nextProps.mazeArray,
         mazeGraph: nextProps.mazeGraph,
+        validPath: nextProps.validPath,
         mazePath: nextProps.mazePath,
       });
     }
@@ -35,11 +37,16 @@ class SolveMaze extends Component {
   }
 
   render() {
-    const pathLength = (this.state.mazePath) ? this.state.mazePath.length : 0;
+    const mazeTitle = (this.state.validPath) ?
+      `Solved Maze Here: (Steps required = ${this.state.mazePath.length})` :
+      `Maze has no valid path from A to B`;
+    
     return getMazeDisplay(
-      getSolutionMaze(this.state.mazeArr, this.state.mazeGraph, this.state.mazePath),
-      "Solved Maze Here:",
-      pathLength,
+      getSolutionMaze(
+        this.state.mazeArr,
+        this.state.mazeGraph,
+        this.state.mazePath),
+      mazeTitle
     );
 
   }

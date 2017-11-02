@@ -31,7 +31,10 @@ class ShowMaze extends Component {
   }
 
   render() {
-    return getMazeDisplay(this.state.mazeArr, "Show Maze Here:");
+    return getMazeDisplay(
+      this.state.mazeArr,
+      "Show Maze Here:"
+    );
   }
 
 }
