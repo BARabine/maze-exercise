@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import logo from './peoplenetlogo.png';
-import './App.css';
 import Flexbox from 'flexbox-react';
 import RaisedButton from 'material-ui/RaisedButton';
+import './App.css';
+import logo from './peoplenetlogo.png';
 import { getMazeArray, buildMazeGraph } from './maze-utils';
-import ShowMaze from './ShowMaze';
-import SolveMaze from './SolveMaze';
+import ShowMaze from './ShowMaze.jsx';
+import SolveMaze from './SolveMaze.jsx';
 import { m1, m2, m3 } from './maze-examples';
 
 class App extends Component {
@@ -18,48 +18,60 @@ class App extends Component {
       mazeGraph: null,
       validPath: false,
       mazePath: [],
-    }
+    };
     this.setMaze = this.setMaze.bind(this);
     this.processMaze = this.processMaze.bind(this);
     this.changeMaze = this.changeMaze.bind(this);
   }
 
-  setMaze = ((event) => {
+  // setMaze = ((event) => {
+  setMaze(event) {
     this.setState({ mazeStr: event.target.value });
-  });
+  }
 
-  processMaze = ((event) => {
-    const mazeStr = this.state.mazeStr;
+  // processMaze = (() => {
+  processMaze() {
+    const { mazeStr } = this.state;
     // console.log(`Inside processMaze! \n${mazeStr}`);
     const mazeArr = getMazeArray(mazeStr);
     const mazeGraph = buildMazeGraph(mazeArr);
     const validPath = mazeGraph.hasValidPath();
     const mazePath = mazeGraph.getShortestPath();
-    this.setState({ mazeArr, mazeGraph, validPath, mazePath });
-  });
+    this.setState({
+      mazeArr,
+      mazeGraph,
+      validPath,
+      mazePath,
+    });
+  }
 
-  changeMaze = ((event) => {
+  changeMaze(event) {
     // console.log(`Inside changeMaze! ${event.target.value}`);
     const defaultVals = {
       mazeArr: null,
       mazeGraph: null,
       validPath: false,
-      mazePath: []
+      mazePath: [],
     };
     switch (event.target.value) {
       case 'm1':
-        this.setState({ mazeStr: m1, ...defaultVals });
+        // this.setState({ mazeStr: m1, ...defaultVals });
+        defaultVals.mazeStr = m1;
         break;
       case 'm2':
-        this.setState({ mazeStr: m2, ...defaultVals });
+        // this.setState({ mazeStr: m2, ...defaultVals });
+        defaultVals.mazeStr = m2;
         break;
       case 'm3':
-        this.setState({ mazeStr: m3, ...defaultVals });
+        // this.setState({ mazeStr: m3, ...defaultVals });
+        defaultVals.mazeStr = m3;
         break;
       default:
-        this.setState({ mazeStr: '', ...defaultVals });
+        // this.setState({ mazeStr: '', ...defaultVals });
+        defaultVals.mazeStr = '';
     }
-  });
+    this.setState(defaultVals);
+  }
 
   render() {
     return (
@@ -74,14 +86,17 @@ class App extends Component {
           className="App-header"
         >
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Front-end Software Engineer Interview Exercise</h1>
+          <h1 className="App-title">
+            Front-end Software Engineer Interview Exercise
+          </h1>
         </Flexbox>
 
         <Flexbox
           flexDirection="column"
         >
           <div className="App-intro">
-            Enter, paste, or select your ASCII maze in the textarea below, then click <em>process.</em>
+            Enter, paste, or select your ASCII maze in the textarea below,
+            then click <em>process.</em>
           </div>
           <div className="maze-selector">
             <label className="radio-label">

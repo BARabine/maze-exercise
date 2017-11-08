@@ -1,26 +1,17 @@
 // ========================================================== //
 // Two-dimensional array representing the ASCII maze
-export const getMazeArray = ((mazeStr) => {
-  const mazeArray = [];
-  const addRow = ((data) => {
-    let rowArray = data.trim().split('');
-    mazeArray.push(rowArray);
-  });
-  for (let row of mazeStr.trim().split('\n')) {
-    // console.log(`Row = ${row.trim()}`);
-    addRow(row);
-  }
-  return mazeArray;
-})
+export const getMazeArray = (mazeStr =>
+  mazeStr.trim().split('\n').map(row => row.trim().split(''))
+);
 
 // ========================================================== //
 class Queue {
   constructor() {
     this.elements = [];
-  };
+  }
   enQueue(element) {
     this.elements.push(element);
-  };
+  }
   deQueue() {
     return this.elements.shift();
   }
@@ -28,23 +19,23 @@ class Queue {
     return this.elements.join(', ');
   }
   isEmpty() {
-    return this.elements.length === 0 ? true : false;
+    return (this.elements.length === 0);
   }
 }
 
 // ========================================================== //
 class Node {
   constructor(x, y, value) {
-    this.node =
-      { x,
-        y,
-        isStart: (value === 'A'),
-        isEnd: (value === 'B'),
-        edges: {},
-        visited: false,
-        dist: Infinity,
-        prevNode: null,
-      };
+    this.node = {
+      x,
+      y,
+      isStart: (value === 'A'),
+      isEnd: (value === 'B'),
+      edges: {},
+      visited: false,
+      dist: Infinity,
+      prevNode: null,
+    };
   }
   setEdge(id) {
     this.node.edges[id] = true;
@@ -98,25 +89,17 @@ class MazeGraph {
   findStartId() {
     const keys = Object.keys(this.graph);
     // console.log(`==>> Keys: ${keys}`);
-    let id = keys.filter(id => {
-      // console.log(`>> id: ${id} => obj.isStart: ${JSON.stringify(this.graph[id].isStart)}`);
-      // if (this.graph[id].isStartNode) {
-      //   return id;
-      // }
-      return (this.graph[id].isStartNode) ? id : null;
-    });
+    const id = keys.filter(key =>
+      // console.log(`>> key: ${key} => obj.isStart: ${JSON.stringify(this.graph[key].isStart)}`);
+      ((this.graph[key].isStartNode) ? key : null));
     return (id.length > 0) ? id[0] : null;
   }
   findEndId() {
     const keys = Object.keys(this.graph);
     // console.log(`==>> Keys: ${keys}`);
-    let id = keys.filter(id => {
-      // console.log(`>> id: ${id} => obj.isEnd: ${JSON.stringify(this.graph[id].isEnd)}`);
-      // if (this.graph[id].isEndNode) {
-      //   return id;
-      // }
-      return (this.graph[id].isEndNode) ? id : null;
-    });
+    const id = keys.filter(key =>
+      // console.log(`>> key: ${key} => obj.isEnd: ${JSON.stringify(this.graph[key].isEnd)}`);
+      ((this.graph[key].isEndNode) ? key : null));
     return (id.length > 0) ? id[0] : null;
   }
   getAdjacentList(fromId) {
@@ -124,13 +107,13 @@ class MazeGraph {
     const children = [];
     let [x, y] = fromId.split(':');
     [x, y] = [parseInt(x, 10), parseInt(y, 10)];
-    let child = `${x}:${y-1}`;    // left of
+    let child = `${x}:${y - 1}`;    // left of
     if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
-    child = `${x-1}:${y}`;  // row above
+    child = `${x - 1}:${y}`;  // row above
     if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
-    child = `${x}:${y+1}`;    // right of
+    child = `${x}:${y + 1}`;    // right of
     if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
-    child = `${x+1}:${y}`;    // row below
+    child = `${x + 1}:${y}`;    // row below
     if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
     return children;
   }
@@ -156,7 +139,7 @@ class MazeGraph {
       }
       const children = this.getAdjacentList(nodeId);
       // console.log(`  >> Adding (${children.length}) = ${JSON.stringify(children)} to Q`);
-      children.map(child => {
+      children.map((child) => {
         q.enQueue(child);
         this.graph[child].setVisited();
         this.graph[child].setDistance(nodeDist + 1);
@@ -171,8 +154,6 @@ class MazeGraph {
   }
 
   getShortestPath(startId = this.findStartId(), endId = this.findEndId()) {
-    // const startId = this.findStartId();
-    // const endId = this.findEndId();
     // starting at the end, work back to start
     const path = [];
     if (startId && endId) {

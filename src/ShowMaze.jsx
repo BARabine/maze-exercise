@@ -10,12 +10,12 @@ class ShowMaze extends Component {
     // console.log(`>>Inside ShowMaze constructor, props = ${JSON.stringify(props)}`);
     this.state = {
       mazeArr: null,
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
     // console.log(`>>Inside ShowMaze componentWillReceiveProps,
-      // nextProps = ${JSON.stringify(nextProps)}`);
+    // nextProps = ${JSON.stringify(nextProps)}`);
     if (nextProps.mazeArray !== null) {
       this.setState({ mazeArr: nextProps.mazeArray });
     }
@@ -33,7 +33,7 @@ class ShowMaze extends Component {
   render() {
     return getMazeDisplay(
       this.state.mazeArr,
-      "Show Maze Here:"
+      'Show Maze Here:',
     );
   }
 

@@ -13,7 +13,7 @@ class SolveMaze extends Component {
       mazeGraph: null,
       validPath: false,
       mazePath: [],
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,14 +39,15 @@ class SolveMaze extends Component {
   render() {
     const mazeTitle = (this.state.validPath) ?
       `Solved Maze Here: (Steps required = ${this.state.mazePath.length})` :
-      `Maze has no valid path from A to B`;
-    
+      'Maze has no valid path from A to B';
+
     return getMazeDisplay(
       getSolutionMaze(
         this.state.mazeArr,
         this.state.mazeGraph,
-        this.state.mazePath),
-      mazeTitle
+        this.state.mazePath,
+      ),
+      mazeTitle,
     );
 
   }

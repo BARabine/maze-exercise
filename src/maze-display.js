@@ -1,13 +1,13 @@
 import React from 'react';
-import './App.css';
 import Flexbox from 'flexbox-react';
+import './App.css';
 
 // ========================================================== //
 // Utilities for displaying the maze
 
 const MazeItem = ((itemObj) => {
   // console.log(`>>> MazeItem: ${JSON.stringify(itemObj)}`);
-  const item = itemObj.item;
+  const { item } = itemObj;
   let mazeItem = null;
   const mazeKey = `maze-item-${itemObj.rowIndex}-${itemObj.itemIndex}`;
   switch (item) {
@@ -33,12 +33,11 @@ const MazeItem = ((itemObj) => {
       break;
   }
   return mazeItem;
-})
+});
 
 const MazeRow = ((rowObj) => {
   // console.log(`==> MazeRow: ${JSON.stringify(rowObj)}`);
-  const row = rowObj.row;
-  const rowIndex = rowObj.rowIndex;
+  const { row, rowIndex } = rowObj;
   const rowKey = `maze-row-${rowIndex}`;
   return (
     <Flexbox flexDirection="row" className="maze-row" key={rowKey}>
@@ -91,7 +90,5 @@ export const getSolutionMaze = ((mazeArr, mazeGraph, pathArr) => {
   }
   return null;
 });
-
-
 
 // ========================================================== //

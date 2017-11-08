@@ -10,6 +10,7 @@
     "react-scripts": "1.0.14"
   },
   "scripts": {
+    "webpack": "webpack",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -17,9 +18,19 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.2",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "prettier": "^1.8.1",
+    "prettier-loader": "^2.0.1",
+    "url-loader": "^0.6.2",
     "webpack": "^3.8.1"
   }
 }
