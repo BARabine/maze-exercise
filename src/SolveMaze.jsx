@@ -2,9 +2,7 @@ import { Component } from 'react';
 import './App.css';
 import { getMazeDisplay, getSolutionMaze } from './maze-display';
 
-
 class SolveMaze extends Component {
-
   constructor(props) {
     super(props);
     // console.log(`>>Inside ShowMaze constructor, props = ${JSON.stringify(props)}`);
@@ -37,21 +35,19 @@ class SolveMaze extends Component {
   }
 
   render() {
-    const mazeTitle = (this.state.validPath) ?
-      `Solved Maze Here: (Steps required = ${this.state.mazePath.length})` :
-      'Maze has no valid path from A to B';
+    const mazeTitle = this.state.validPath
+      ? `Solved Maze Here: (Steps required = ${this.state.mazePath.length})`
+      : 'Maze has no valid path from A to B';
 
     return getMazeDisplay(
       getSolutionMaze(
         this.state.mazeArr,
         this.state.mazeGraph,
-        this.state.mazePath,
+        this.state.mazePath
       ),
-      mazeTitle,
+      mazeTitle
     );
-
   }
-
 }
 
 export default SolveMaze;

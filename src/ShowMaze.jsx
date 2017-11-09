@@ -2,9 +2,7 @@ import { Component } from 'react';
 import './App.css';
 import { getMazeDisplay } from './maze-display';
 
-
 class ShowMaze extends Component {
-
   constructor(props) {
     super(props);
     // console.log(`>>Inside ShowMaze constructor, props = ${JSON.stringify(props)}`);
@@ -31,12 +29,8 @@ class ShowMaze extends Component {
   }
 
   render() {
-    return getMazeDisplay(
-      this.state.mazeArr,
-      'Show Maze Here:',
-    );
+    return getMazeDisplay(this.state.mazeArr, 'Show Maze Here:');
   }
-
 }
 
 export default ShowMaze;

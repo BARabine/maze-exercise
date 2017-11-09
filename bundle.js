@@ -3622,7 +3622,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // ========================================================== //
 // Utilities for displaying the maze
-
 var MazeItem = function MazeItem(itemObj) {
   // console.log(`>>> MazeItem: ${JSON.stringify(itemObj)}`);
   var item = itemObj.item;
@@ -3672,7 +3671,12 @@ var MazeRow = function MazeRow(rowObj) {
     _flexboxReact2.default,
     { flexDirection: 'row', className: 'maze-row', key: rowKey },
     row.map(function (mazeItem, itemIndex) {
-      return _react2.default.createElement(MazeItem, { item: mazeItem, rowIndex: rowIndex, itemIndex: itemIndex, key: 'itemkey' + rowIndex + '.' + itemIndex });
+      return _react2.default.createElement(MazeItem, {
+        item: mazeItem,
+        rowIndex: rowIndex,
+        itemIndex: itemIndex,
+        key: 'itemkey' + rowIndex + '.' + itemIndex
+      });
     })
   );
 };
@@ -3691,9 +3695,17 @@ var getMazeDisplay = exports.getMazeDisplay = function getMazeDisplay(mazeArr, t
       ),
       _react2.default.createElement(
         _flexboxReact2.default,
-        { flexDirection: 'column', className: 'maze-container', key: 'maze-container' },
+        {
+          flexDirection: 'column',
+          className: 'maze-container',
+          key: 'maze-container'
+        },
         mazeArr.map(function (oneRow, rowIndex) {
-          return _react2.default.createElement(MazeRow, { row: oneRow, rowIndex: rowIndex, key: 'rowkey' + rowIndex });
+          return _react2.default.createElement(MazeRow, {
+            row: oneRow,
+            rowIndex: rowIndex,
+            key: 'rowkey' + rowIndex
+          });
         })
       )
     );
@@ -30053,10 +30065,7 @@ var App = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         _flexboxReact2.default,
-        {
-          className: 'App',
-          flexDirection: 'column'
-        },
+        { className: 'App', flexDirection: 'column' },
         _react2.default.createElement(
           _flexboxReact2.default,
           {
@@ -30074,9 +30083,7 @@ var App = function (_Component) {
         ),
         _react2.default.createElement(
           _flexboxReact2.default,
-          {
-            flexDirection: 'column'
-          },
+          { flexDirection: 'column' },
           _react2.default.createElement(
             'div',
             { className: 'App-intro' },
@@ -30093,29 +30100,50 @@ var App = function (_Component) {
             _react2.default.createElement(
               'label',
               { className: 'radio-label' },
-              _react2.default.createElement('input', { type: 'radio', name: 'maze', id: 'maze-m0',
-                value: 'm0', onChange: this.changeMaze, defaultChecked: true }),
+              _react2.default.createElement('input', {
+                type: 'radio',
+                name: 'maze',
+                id: 'maze-m0',
+                value: 'm0',
+                onChange: this.changeMaze,
+                defaultChecked: true
+              }),
               'New'
             ),
             _react2.default.createElement(
               'label',
               { className: 'radio-label' },
-              _react2.default.createElement('input', { type: 'radio', name: 'maze', id: 'maze-m1',
-                value: 'm1', onChange: this.changeMaze }),
+              _react2.default.createElement('input', {
+                type: 'radio',
+                name: 'maze',
+                id: 'maze-m1',
+                value: 'm1',
+                onChange: this.changeMaze
+              }),
               'Maze 1'
             ),
             _react2.default.createElement(
               'label',
               { className: 'radio-label' },
-              _react2.default.createElement('input', { type: 'radio', name: 'maze', id: 'maze-m2',
-                value: 'm2', onChange: this.changeMaze }),
+              _react2.default.createElement('input', {
+                type: 'radio',
+                name: 'maze',
+                id: 'maze-m2',
+                value: 'm2',
+                onChange: this.changeMaze
+              }),
               'Maze 2'
             ),
             _react2.default.createElement(
               'label',
               { className: 'radio-label' },
-              _react2.default.createElement('input', { type: 'radio', name: 'maze', id: 'maze-m3',
-                value: 'm3', onChange: this.changeMaze }),
+              _react2.default.createElement('input', {
+                type: 'radio',
+                name: 'maze',
+                id: 'maze-m3',
+                value: 'm3',
+                onChange: this.changeMaze
+              }),
               'Maze 3'
             )
           ),
@@ -30140,9 +30168,7 @@ var App = function (_Component) {
               onClick: this.processMaze
             })
           ),
-          _react2.default.createElement(_ShowMaze2.default, {
-            mazeArray: this.state.mazeArr
-          }),
+          _react2.default.createElement(_ShowMaze2.default, { mazeArray: this.state.mazeArr }),
           _react2.default.createElement(_SolveMaze2.default, {
             mazeArray: this.state.mazeArr,
             mazeGraph: this.state.mazeGraph,

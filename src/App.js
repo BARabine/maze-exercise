@@ -9,7 +9,6 @@ import SolveMaze from './SolveMaze.jsx';
 import { m1, m2, m3 } from './maze-examples';
 
 class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -75,10 +74,7 @@ class App extends Component {
 
   render() {
     return (
-      <Flexbox
-        className="App"
-        flexDirection="column"
-      >
+      <Flexbox className="App" flexDirection="column">
         <Flexbox
           element="header"
           flexDirection="column"
@@ -91,29 +87,48 @@ class App extends Component {
           </h1>
         </Flexbox>
 
-        <Flexbox
-          flexDirection="column"
-        >
+        <Flexbox flexDirection="column">
           <div className="App-intro">
-            Enter, paste, or select your ASCII maze in the textarea below,
-            then click <em>process.</em>
+            Enter, paste, or select your ASCII maze in the textarea below, then
+            click <em>process.</em>
           </div>
           <div className="maze-selector">
             <label className="radio-label">
-              <input type="radio" name="maze" id="maze-m0"
-                value="m0" onChange={this.changeMaze} defaultChecked />New
+              <input
+                type="radio"
+                name="maze"
+                id="maze-m0"
+                value="m0"
+                onChange={this.changeMaze}
+                defaultChecked
+              />New
             </label>
             <label className="radio-label">
-              <input type="radio" name="maze" id="maze-m1"
-                value="m1" onChange={this.changeMaze} />Maze 1
+              <input
+                type="radio"
+                name="maze"
+                id="maze-m1"
+                value="m1"
+                onChange={this.changeMaze}
+              />Maze 1
             </label>
             <label className="radio-label">
-              <input type="radio" name="maze" id="maze-m2"
-                value="m2" onChange={this.changeMaze} />Maze 2
+              <input
+                type="radio"
+                name="maze"
+                id="maze-m2"
+                value="m2"
+                onChange={this.changeMaze}
+              />Maze 2
             </label>
             <label className="radio-label">
-              <input type="radio" name="maze" id="maze-m3"
-                value="m3" onChange={this.changeMaze} />Maze 3
+              <input
+                type="radio"
+                name="maze"
+                id="maze-m3"
+                value="m3"
+                onChange={this.changeMaze}
+              />Maze 3
             </label>
           </div>
           <textarea
@@ -122,8 +137,7 @@ class App extends Component {
             className="aMaze"
             value={this.state.mazeStr}
             onChange={this.setMaze}
-          >
-          </textarea>
+          />
           <Flexbox
             flexDirection="row"
             justifyContent="space-around"
@@ -137,9 +151,7 @@ class App extends Component {
             />
           </Flexbox>
 
-          <ShowMaze
-            mazeArray={this.state.mazeArr}
-          />
+          <ShowMaze mazeArray={this.state.mazeArr} />
 
           <SolveMaze
             mazeArray={this.state.mazeArr}

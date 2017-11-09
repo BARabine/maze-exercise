@@ -7,8 +7,10 @@ import registerServiceWorker from './registerServiceWorker';
 
 /* eslint-disable no-undef */
 ReactDOM.render(
-  (<MuiThemeProvider><App /></MuiThemeProvider>),
-  document.getElementById('root'),
+  <MuiThemeProvider>
+    <App />
+  </MuiThemeProvider>,
+  document.getElementById('root')
 );
 /* eslint-enable no-undef */
 registerServiceWorker();

@@ -1,8 +1,10 @@
 // ========================================================== //
 // Two-dimensional array representing the ASCII maze
-export const getMazeArray = (mazeStr =>
-  mazeStr.trim().split('\n').map(row => row.trim().split(''))
-);
+export const getMazeArray = mazeStr =>
+  mazeStr
+    .trim()
+    .split('\n')
+    .map(row => row.trim().split(''));
 
 // ========================================================== //
 export class Queue {
@@ -19,7 +21,7 @@ export class Queue {
     return this.elements.join(', ');
   }
   isEmpty() {
-    return (this.elements.length === 0);
+    return this.elements.length === 0;
   }
 }
 
@@ -29,8 +31,8 @@ export class Node {
     this.node = {
       x,
       y,
-      isStart: (value === 'A'),
-      isEnd: (value === 'B'),
+      isStart: value === 'A',
+      isEnd: value === 'B',
       edges: {},
       visited: false,
       dist: Infinity,
@@ -89,32 +91,40 @@ export class MazeGraph {
   findStartId() {
     const keys = Object.keys(this.graph);
     // console.log(`==>> Keys: ${keys}`);
-    const id = keys.filter(key =>
-      // console.log(`>> key: ${key} => obj.isStart: ${JSON.stringify(this.graph[key].isStart)}`);
-      ((this.graph[key].isStartNode) ? key : null));
-    return (id.length > 0) ? id[0] : null;
+    const id = keys.filter(
+      key =>
+        // console.log(`>> key: ${key} => obj.isStart: ${JSON.stringify(this.graph[key].isStart)}`);
+        this.graph[key].isStartNode ? key : null
+    );
+    return id.length > 0 ? id[0] : null;
   }
   findEndId() {
     const keys = Object.keys(this.graph);
     // console.log(`==>> Keys: ${keys}`);
-    const id = keys.filter(key =>
-      // console.log(`>> key: ${key} => obj.isEnd: ${JSON.stringify(this.graph[key].isEnd)}`);
-      ((this.graph[key].isEndNode) ? key : null));
-    return (id.length > 0) ? id[0] : null;
+    const id = keys.filter(
+      key =>
+        // console.log(`>> key: ${key} => obj.isEnd: ${JSON.stringify(this.graph[key].isEnd)}`);
+        this.graph[key].isEndNode ? key : null
+    );
+    return id.length > 0 ? id[0] : null;
   }
   getAdjacentList(fromId) {
     // returns horizontal and vertical adjacent children...
     const children = [];
     let [x, y] = fromId.split(':');
     [x, y] = [parseInt(x, 10), parseInt(y, 10)];
-    let child = `${x}:${y - 1}`;    // left of
-    if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
-    child = `${x - 1}:${y}`;  // row above
-    if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
-    child = `${x}:${y + 1}`;    // right of
-    if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
-    child = `${x + 1}:${y}`;    // row below
-    if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
+    let child = `${x}:${y - 1}`; // left of
+    if (this.contains(child) && !this.graph[child].isVisited)
+      children.push(child);
+    child = `${x - 1}:${y}`; // row above
+    if (this.contains(child) && !this.graph[child].isVisited)
+      children.push(child);
+    child = `${x}:${y + 1}`; // right of
+    if (this.contains(child) && !this.graph[child].isVisited)
+      children.push(child);
+    child = `${x + 1}:${y}`; // row below
+    if (this.contains(child) && !this.graph[child].isVisited)
+      children.push(child);
     return children;
   }
 
@@ -138,7 +148,7 @@ export class MazeGraph {
       }
       const children = this.getAdjacentList(nodeId);
       // console.log(`  >> Adding (${children.length}) = ${JSON.stringify(children)} to Q`);
-      children.map((child) => {
+      children.map(child => {
         q.enQueue(child);
         this.graph[child].setVisited();
         this.graph[child].setDistance(nodeDist + 1);
@@ -168,11 +178,10 @@ export class MazeGraph {
     }
     return path.reverse();
   }
-
 }
 
 // ========================================================== //
-export const buildMazeGraph = ((maze) => {
+export const buildMazeGraph = maze => {
   const mazeGraph = new MazeGraph();
   // Parse through the maze array and create all the graph verticies
   let cur = null;
@@ -184,7 +193,7 @@ export const buildMazeGraph = ((maze) => {
       if (item !== '#') {
         // console.log(`>> Created Vertex: x: ${i}, y: ${j}, val: ${item}`);
         mazeGraph.addVertex(i, j, item);
-        prev = (cur === null) ? null : cur;
+        prev = cur === null ? null : cur;
         cur = `${i}:${j}`;
         // console.log(`\t===> prev = ${prev}, cur = ${cur}`);
         if (prev !== null && cur !== null) {
@@ -206,5 +215,5 @@ export const buildMazeGraph = ((maze) => {
     mazeGraph.doBFS(startId, endId);
   }
   return mazeGraph;
-});
+};
 // ========================================================== //
