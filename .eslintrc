@@ -1,5 +1,9 @@
 {
   parser: "babel-eslint",
+  "env": {
+    "jest": true,
+    "jasmine": true,
+  },
   "plugins": ["react"],
   "rules": {
     "padded-blocks": 0,

@@ -36905,7 +36905,7 @@ var getMazeArray = exports.getMazeArray = function getMazeArray(mazeStr) {
 
 // ========================================================== //
 
-var Queue = function () {
+var Queue = exports.Queue = function () {
   function Queue() {
     _classCallCheck(this, Queue);
 
@@ -36940,7 +36940,7 @@ var Queue = function () {
 // ========================================================== //
 
 
-var Node = function () {
+var Node = exports.Node = function () {
   function Node(x, y, value) {
     _classCallCheck(this, Node);
 
@@ -37008,7 +37008,7 @@ var Node = function () {
 // ========================================================== //
 
 
-var MazeGraph = function () {
+var MazeGraph = exports.MazeGraph = function () {
   function MazeGraph() {
     _classCallCheck(this, MazeGraph);
 

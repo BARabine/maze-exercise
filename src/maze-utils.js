@@ -5,7 +5,7 @@ export const getMazeArray = (mazeStr =>
 );
 
 // ========================================================== //
-class Queue {
+export class Queue {
   constructor() {
     this.elements = [];
   }
@@ -24,7 +24,7 @@ class Queue {
 }
 
 // ========================================================== //
-class Node {
+export class Node {
   constructor(x, y, value) {
     this.node = {
       x,
@@ -66,7 +66,7 @@ class Node {
   }
 }
 // ========================================================== //
-class MazeGraph {
+export class MazeGraph {
   constructor() {
     this.graph = {};
   }
@@ -117,7 +117,6 @@ class MazeGraph {
     if (this.contains(child) && !this.graph[child].isVisited) children.push(child);
     return children;
   }
-
 
   doBFS(startId, endId) {
     // console.log(`\n**>> Starting BFS, ${startId} to ${endId}`);
@@ -171,7 +170,6 @@ class MazeGraph {
   }
 
 }
-
 
 // ========================================================== //
 export const buildMazeGraph = ((maze) => {
