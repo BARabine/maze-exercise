@@ -114,3 +114,61 @@ export const getSolutionMaze = (mazeArr, mazeGraph, pathArr) => {
 };
 
 // ========================================================== //
+const GridItem = itemObj => {
+  const { item } = itemObj;
+  let gridItem = null;
+  const gridKey = `grid-item-${itemObj.rIndex}-${itemObj.iIndex}`;
+  switch (item) {
+    case 'A':
+      gridItem = (
+        <div className="maze-grid-item startpoint" key={gridKey}>
+          {item}
+        </div>
+      );
+      break;
+    case '.':
+      gridItem = <div className="maze-grid-item open" key={gridKey} />;
+      break;
+    case 'X':
+      gridItem = <div className="maze-grid-item path" key={gridKey} />;
+      break;
+    case 'B':
+      gridItem = (
+        <div className="maze-grid-item endpoint" key={gridKey}>
+          {item}
+        </div>
+      );
+      break;
+    default:
+      gridItem = <div className="maze-grid-item block" key={gridKey} />;
+      break;
+  }
+  return gridItem;
+};
+
+export const getMazeGridDisplay = (mazeArr, title) => {
+  // console.log(`>> MazeGridArr: ${JSON.stringify(mazeArr)}`);
+  if (mazeArr && mazeArr.length > 0) {
+    // console.log(`>> MazeGridArr Length: ${mazeArr.length}`);
+    return (
+      <div className="maze-display" key="grid-maze-display-title">
+        <div className="maze-display-title" key="maze-grid-title">
+          {title}
+        </div>
+        <div className="maze-grid-container" key="maze-grid-container">
+          {mazeArr.map((row, rIndex) =>
+            row.map((item, iIndex) => (
+              <GridItem
+                item={item}
+                rowIndex={rIndex}
+                itemIndex={iIndex}
+                key={`gkey${rIndex}-${iIndex}`}
+              />
+            ))
+          )}
+        </div>
+      </div>
+    );
+  }
+  return <div />;
+};

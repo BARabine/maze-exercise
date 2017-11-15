@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import './App.css';
 import { getMazeDisplay } from './maze-display';
 
 class ShowMaze extends Component {

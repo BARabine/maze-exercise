@@ -6,6 +6,7 @@ import logo from './peoplenetlogo.png';
 import { getMazeArray, buildMazeGraph } from './maze-utils';
 import ShowMaze from './ShowMaze.jsx';
 import SolveMaze from './SolveMaze.jsx';
+import ShowMazeGrid from './ShowMazeGrid.jsx';
 import { m1, m2, m3 } from './maze-examples';
 
 class App extends Component {
@@ -159,6 +160,8 @@ class App extends Component {
             validPath={this.state.validPath}
             mazePath={this.state.mazePath}
           />
+
+          <ShowMazeGrid mazeArray={this.state.mazeArr} />
         </Flexbox>
       </Flexbox>
     );
