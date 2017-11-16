@@ -95,8 +95,9 @@
   padding-top: 100%;
 }
 span.maze-box {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   font-family: monospace;
 }
 .open {

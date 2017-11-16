@@ -3606,7 +3606,7 @@ if(false) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getMazeGridDisplay = exports.getSolutionMaze = exports.getMazeDisplay = undefined;
+exports.getMazeGridDisplay = exports.setGridProps = exports.getSolutionMaze = exports.getMazeDisplay = undefined;
 
 var _react = __webpack_require__(1);
 
@@ -3739,6 +3739,30 @@ var getSolutionMaze = exports.getSolutionMaze = function getSolutionMaze(mazeArr
 };
 
 // ========================================================== //
+// These methods are used to display the maze using CSS Grid
+// ========================================================== //
+var setGridProps = exports.setGridProps = function setGridProps(rows, cols) {
+  /* eslint-disable no-undef */
+  var htmlStyles = window.getComputedStyle(document.querySelector('html'));
+  var rowNum = parseInt(htmlStyles.getPropertyValue('--rowNum'), 10);
+  var colNum = parseInt(htmlStyles.getPropertyValue('--colNum'), 10);
+  var size = htmlStyles.getPropertyValue('--gridSize');
+
+  if (rowNum !== rows) {
+    document.documentElement.style.setProperty('--rowNum', rows);
+  }
+
+  if (colNum !== cols) {
+    document.documentElement.style.setProperty('--colNum', cols);
+    if (cols > 60 && size !== '2vh') {
+      document.documentElement.style.setProperty('--gridSize', '2vh');
+    } else if (cols <= 60 && size !== '3vmin') {
+      document.documentElement.style.setProperty('--gridSize', '3vmin');
+    }
+  }
+  /* eslint-enable no-undef */
+};
+
 var GridItem = function GridItem(itemObj) {
   var item = itemObj.item;
 
@@ -3774,15 +3798,16 @@ var GridItem = function GridItem(itemObj) {
 
 var getMazeGridDisplay = exports.getMazeGridDisplay = function getMazeGridDisplay(mazeArr, title) {
   // console.log(`>> MazeGridArr: ${JSON.stringify(mazeArr)}`);
-  if (mazeArr && mazeArr.length > 0) {
+  if (mazeArr && mazeArr.length > 0 && mazeArr[0].length > 0) {
     // console.log(`>> MazeGridArr Length: ${mazeArr.length}`);
+    var gridSize = '(' + mazeArr[0].length + ' columns x ' + mazeArr.length + ' rows)';
     return _react2.default.createElement(
       'div',
       { className: 'maze-display', key: 'grid-maze-display-title' },
       _react2.default.createElement(
         'div',
         { className: 'maze-display-title', key: 'maze-grid-title' },
-        title
+        title + ' ' + gridSize
       ),
       _react2.default.createElement(
         'div',
@@ -3802,6 +3827,7 @@ var getMazeGridDisplay = exports.getMazeGridDisplay = function getMazeGridDispla
   }
   return _react2.default.createElement('div', null);
 };
+// ========================================================== //
 
 /***/ }),
 /* 91 */
@@ -30039,6 +30065,10 @@ var _ShowMazeGrid = __webpack_require__(226);
 
 var _ShowMazeGrid2 = _interopRequireDefault(_ShowMazeGrid);
 
+var _SolveMazeGrid = __webpack_require__(229);
+
+var _SolveMazeGrid2 = _interopRequireDefault(_SolveMazeGrid);
+
 var _mazeExamples = __webpack_require__(227);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30067,6 +30097,8 @@ var App = function (_Component) {
     _this.setMaze = _this.setMaze.bind(_this);
     _this.processMaze = _this.processMaze.bind(_this);
     _this.changeMaze = _this.changeMaze.bind(_this);
+    _this.getInputItem = _this.getInputItem.bind(_this);
+    _this.getRadioChoices = _this.getRadioChoices.bind(_this);
     return _this;
   }
 
@@ -30128,8 +30160,44 @@ var App = function (_Component) {
       this.setState(defaultVals);
     }
   }, {
+    key: 'getInputItem',
+    value: function getInputItem(obj) {
+      return obj.def ? _react2.default.createElement('input', {
+        type: 'radio',
+        name: 'maze',
+        id: obj.id,
+        value: obj.value,
+        onChange: this.changeMaze,
+        defaultChecked: true
+      }) : _react2.default.createElement('input', {
+        type: 'radio',
+        name: 'maze',
+        id: obj.id,
+        value: obj.value,
+        onChange: this.changeMaze
+      });
+    }
+  }, {
+    key: 'getRadioChoices',
+    value: function getRadioChoices(opts) {
+      var _this2 = this;
+
+      return opts.map(function (obj) {
+        return _react2.default.createElement(
+          'label',
+          { className: 'radio-label' },
+          _this2.getInputItem(obj),
+          obj.label
+        );
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      /* eslint-disable object-curly-newline */
+      var opts = [{ id: 'maze-m0', value: 'm0', def: true, label: 'New' }, { id: 'maze-m1', value: 'm1', def: false, label: 'Maze 1' }, { id: 'maze-m2', value: 'm2', def: false, label: 'Maze 2' }, { id: 'maze-m3', value: 'm3', def: false, label: 'Maze 3' }];
+      /* eslint-enable object-curly-newline */
+
       return _react2.default.createElement(
         _flexboxReact2.default,
         { className: 'App', flexDirection: 'column' },
@@ -30167,55 +30235,11 @@ var App = function (_Component) {
             _react2.default.createElement(
               'label',
               { className: 'radio-label' },
-              _react2.default.createElement('input', {
-                type: 'radio',
-                name: 'maze',
-                id: 'maze-m0',
-                value: 'm0',
-                onChange: this.changeMaze,
-                defaultChecked: true
-              }),
-              'New'
-            ),
-            _react2.default.createElement(
-              'label',
-              { className: 'radio-label' },
-              _react2.default.createElement('input', {
-                type: 'radio',
-                name: 'maze',
-                id: 'maze-m1',
-                value: 'm1',
-                onChange: this.changeMaze
-              }),
-              'Maze 1'
-            ),
-            _react2.default.createElement(
-              'label',
-              { className: 'radio-label' },
-              _react2.default.createElement('input', {
-                type: 'radio',
-                name: 'maze',
-                id: 'maze-m2',
-                value: 'm2',
-                onChange: this.changeMaze
-              }),
-              'Maze 2'
-            ),
-            _react2.default.createElement(
-              'label',
-              { className: 'radio-label' },
-              _react2.default.createElement('input', {
-                type: 'radio',
-                name: 'maze',
-                id: 'maze-m3',
-                value: 'm3',
-                onChange: this.changeMaze
-              }),
-              'Maze 3'
+              this.getRadioChoices(opts)
             )
           ),
           _react2.default.createElement('textarea', {
-            rows: '20',
+            rows: '22',
             cols: '100',
             className: 'aMaze',
             value: this.state.mazeStr,
@@ -30242,7 +30266,13 @@ var App = function (_Component) {
             validPath: this.state.validPath,
             mazePath: this.state.mazePath
           }),
-          _react2.default.createElement(_ShowMazeGrid2.default, { mazeArray: this.state.mazeArr })
+          _react2.default.createElement(_ShowMazeGrid2.default, { mazeArray: this.state.mazeArr }),
+          _react2.default.createElement(_SolveMazeGrid2.default, {
+            mazeArray: this.state.mazeArr,
+            mazeGraph: this.state.mazeGraph,
+            validPath: this.state.validPath,
+            mazePath: this.state.mazePath
+          })
         )
       );
     }
@@ -36961,7 +36991,7 @@ exports = module.exports = __webpack_require__(84)(undefined);
 
 
 // module
-exports.push([module.i, ":root {\n  --rowNum: 2;\n  --colNum: 4;\n  --gridSize: 3vmin;\n}\n\n.App {\n  /*display: flex;*/\n  /*flex-direction: column;*/\n  flex-wrap: wrap;\n  /*justify-content: ;*/\n  margin: 0 30px 20px 30px;\n  /*text-align: center;*/\n}\n\n.App-header {\n  background-color: #222;\n  height: auto;\n  padding: 20px;\n  color: white;\n}\n.App-logo {\n  width: 50%;\n  max-width: 400px;\n}\n.App-title {\n  font-size: 1.5em;\n}\n\n.App-intro {\n  font-size: large;\n  margin-top: 10px;\n}\n\n.maze-selector {\n  margin: 10px;\n}\n.radio-label {\n  margin-right: 20px;\n}\n\n.aMaze {\n  font-family: monospace;\n}\n\n.maze-display-title {\n  margin: 20px 0 10px;\n}\n\n.button-row {\n  margin-top: 20px;\n}\n.app-button {\n  width: 200px;\n  height: 30px;\n}\n\n.show-maze {\n  margin-top: 30px;\n}\n\n.maze-container {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  flex-wrap: nowrap;\n}\n.maze-grid-container {\n  display: grid;\n  grid-template-rows: repeat(var(--rowNum), var(--gridSize));\n  grid-template-columns: repeat(var(--colNum), var(--gridSize));\n}\n.maze-grid-item {\n  display: flex;\n  grid-column-start: auto;\n  grid-row-start: auto;\n  font-family: monospace;\n  border: 1px solid grey;\n  justify-content: center;\n  align-items: center;\n}\n.maze-row {\n  display: flex;\n  flex-direction: row;\n}\n.maze-box {\n  float: left;\n  width: 25px;\n  height: 25px;\n  border: 1px solid grey;\n}\n.maze-box:before {\n  content: \"\";\n  display: block;\n  padding-top: 100%;\n}\nspan.maze-box {\n  display: inline-flex;\n  align-items: center;\n  font-family: monospace;\n}\n.open {\n  background-color: white;\n}\n.block {\n  background-color: red;\n}\n.startpoint {\n  background-color: green;\n}\n.endpoint {\n  background-color: green;\n}\n.path {\n  background-color: yellow;\n}\n", ""]);
+exports.push([module.i, ":root {\n  --rowNum: 2;\n  --colNum: 4;\n  --gridSize: 3vmin;\n}\n\n.App {\n  /*display: flex;*/\n  /*flex-direction: column;*/\n  flex-wrap: wrap;\n  /*justify-content: ;*/\n  margin: 0 30px 20px 30px;\n  /*text-align: center;*/\n}\n\n.App-header {\n  background-color: #222;\n  height: auto;\n  padding: 20px;\n  color: white;\n}\n.App-logo {\n  width: 50%;\n  max-width: 400px;\n}\n.App-title {\n  font-size: 1.5em;\n}\n\n.App-intro {\n  font-size: large;\n  margin-top: 10px;\n}\n\n.maze-selector {\n  margin: 10px;\n}\n.radio-label {\n  margin-right: 20px;\n}\n\n.aMaze {\n  font-family: monospace;\n}\n\n.maze-display-title {\n  margin: 20px 0 10px;\n}\n\n.button-row {\n  margin-top: 20px;\n}\n.app-button {\n  width: 200px;\n  height: 30px;\n}\n\n.show-maze {\n  margin-top: 30px;\n}\n\n.maze-container {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  flex-wrap: nowrap;\n}\n.maze-grid-container {\n  display: grid;\n  grid-template-rows: repeat(var(--rowNum), var(--gridSize));\n  grid-template-columns: repeat(var(--colNum), var(--gridSize));\n}\n.maze-grid-item {\n  display: flex;\n  grid-column-start: auto;\n  grid-row-start: auto;\n  font-family: monospace;\n  border: 1px solid grey;\n  justify-content: center;\n  align-items: center;\n}\n.maze-row {\n  display: flex;\n  flex-direction: row;\n}\n.maze-box {\n  float: left;\n  width: 25px;\n  height: 25px;\n  border: 1px solid grey;\n}\n.maze-box:before {\n  content: \"\";\n  display: block;\n  padding-top: 100%;\n}\nspan.maze-box {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-family: monospace;\n}\n.open {\n  background-color: white;\n}\n.block {\n  background-color: red;\n}\n.startpoint {\n  background-color: green;\n}\n.endpoint {\n  background-color: green;\n}\n.path {\n  background-color: yellow;\n}\n", ""]);
 
 // exports
 
@@ -37442,9 +37472,84 @@ exports.default = SolveMaze;
 
 /***/ }),
 /* 226 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: Unexpected token (60:9)\n\n\u001b[0m \u001b[90m 58 | \u001b[39m  }\n \u001b[90m 59 | \u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 60 | \u001b[39m  render \u001b[33m=\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m    | \u001b[39m         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 61 | \u001b[39m    \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mupdateCssProps()\u001b[33m;\u001b[39m\n \u001b[90m 62 | \u001b[39m    \u001b[36mreturn\u001b[39m getMazeGridDisplay(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mstate\u001b[33m.\u001b[39mmazeArr\u001b[33m,\u001b[39m \u001b[32m'Show Grid Maze Here:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 63 | \u001b[39m  }\u001b[33m;\u001b[39m\u001b[0m\n");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _mazeDisplay = __webpack_require__(90);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ShowMazeGrid = function (_Component) {
+  _inherits(ShowMazeGrid, _Component);
+
+  function ShowMazeGrid(props) {
+    _classCallCheck(this, ShowMazeGrid);
+
+    // console.log(`>>Inside ShowMazeGrid constructor, props = ${JSON.stringify(props)}`);
+    var _this = _possibleConstructorReturn(this, (ShowMazeGrid.__proto__ || Object.getPrototypeOf(ShowMazeGrid)).call(this, props));
+
+    _this.state = {
+      mazeArr: null
+    };
+    _this.updateCssProps = _this.updateCssProps.bind(_this);
+    return _this;
+  }
+
+  _createClass(ShowMazeGrid, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      // console.log(`>>Inside ShowMazeGrid componentWillReceiveProps,
+      // nextProps = ${JSON.stringify(nextProps)}`);
+      if (nextProps.mazeArray !== null) {
+        this.setState({ mazeArr: nextProps.mazeArray });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
+      // console.log(`>>Inside ShowMazeGrid shouldComponentUpdate,
+      //   nextProps = ${JSON.stringify(nextProps)}`);
+      if (nextProps.mazeArr !== this.state.mazeArr) {
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: 'updateCssProps',
+    value: function updateCssProps() {
+      if (this.state.mazeArr && this.state.mazeArr.length > 0) {
+        // assumes the maze array is rectangular.
+        var arrRows = this.state.mazeArr.length;
+        var arrCols = this.state.mazeArr[0].length;
+        (0, _mazeDisplay.setGridProps)(arrRows, arrCols);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      this.updateCssProps();
+      return (0, _mazeDisplay.getMazeGridDisplay)(this.state.mazeArr, 'Show Grid Maze Here:');
+    }
+  }]);
+
+  return ShowMazeGrid;
+}(_react.Component);
+
+exports.default = ShowMazeGrid;
 
 /***/ }),
 /* 227 */
@@ -37575,6 +37680,96 @@ function unregister() {
 
 /* eslint-enable */
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _mazeDisplay = __webpack_require__(90);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SolveMazeGrid = function (_Component) {
+  _inherits(SolveMazeGrid, _Component);
+
+  function SolveMazeGrid(props) {
+    _classCallCheck(this, SolveMazeGrid);
+
+    // console.log(`>>Inside SolveMazeGrid constructor, props = ${JSON.stringify(props)}`);
+    var _this = _possibleConstructorReturn(this, (SolveMazeGrid.__proto__ || Object.getPrototypeOf(SolveMazeGrid)).call(this, props));
+
+    _this.state = {
+      mazeArr: null,
+      mazeGraph: null,
+      validPath: false,
+      mazePath: []
+    };
+    _this.updateCssProps = _this.updateCssProps.bind(_this);
+    return _this;
+  }
+
+  _createClass(SolveMazeGrid, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.mazeArray !== null) {
+        // console.log(`>>Inside SolveMazeGrid componentWillReceiveProps, nextProps = ${JSON.stringify(nextProps)}`);
+        this.setState({
+          mazeArr: nextProps.mazeArray,
+          mazeGraph: nextProps.mazeGraph,
+          validPath: nextProps.validPath,
+          mazePath: nextProps.mazePath
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
+      if (nextProps.mazePath !== this.state.mazePath) {
+        // console.log(`>>Inside SolveMaze shouldComponentUpdate, nextProps = ${JSON.stringify(nextProps)}`);
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: 'updateCssProps',
+    value: function updateCssProps() {
+      if (this.state.mazeArr && this.state.mazeArr.length > 0) {
+        // assumes the maze array is rectangular.
+        var arrRows = this.state.mazeArr.length;
+        var arrCols = this.state.mazeArr[0].length;
+        (0, _mazeDisplay.setGridProps)(arrRows, arrCols);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var len = this.state.mazePath.length;
+      var mazeTitle = this.state.validPath ? 'Solved Maze Grid Here: (Steps required = ' + len + ')' : 'Maze has no valid path from A to B';
+      this.updateCssProps();
+
+      return (0, _mazeDisplay.getMazeGridDisplay)((0, _mazeDisplay.getSolutionMaze)(this.state.mazeArr, this.state.mazeGraph, this.state.mazePath), mazeTitle);
+    }
+  }]);
+
+  return SolveMazeGrid;
+}(_react.Component);
+
+exports.default = SolveMazeGrid;
 
 /***/ })
 /******/ ]);

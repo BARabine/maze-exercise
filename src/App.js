@@ -7,6 +7,7 @@ import { getMazeArray, buildMazeGraph } from './maze-utils';
 import ShowMaze from './ShowMaze.jsx';
 import SolveMaze from './SolveMaze.jsx';
 import ShowMazeGrid from './ShowMazeGrid.jsx';
+import SolveMazeGrid from './SolveMazeGrid.jsx';
 import { m1, m2, m3 } from './maze-examples';
 
 class App extends Component {
@@ -22,6 +23,8 @@ class App extends Component {
     this.setMaze = this.setMaze.bind(this);
     this.processMaze = this.processMaze.bind(this);
     this.changeMaze = this.changeMaze.bind(this);
+    this.getInputItem = this.getInputItem.bind(this);
+    this.getRadioChoices = this.getRadioChoices.bind(this);
   }
 
   // setMaze = ((event) => {
@@ -73,7 +76,46 @@ class App extends Component {
     this.setState(defaultVals);
   }
 
+  getInputItem(obj) {
+    return obj.def ? (
+      <input
+        type="radio"
+        name="maze"
+        id={obj.id}
+        value={obj.value}
+        onChange={this.changeMaze}
+        defaultChecked
+      />
+    ) : (
+      <input
+        type="radio"
+        name="maze"
+        id={obj.id}
+        value={obj.value}
+        onChange={this.changeMaze}
+      />
+    );
+  }
+
+  getRadioChoices(opts) {
+    return opts.map(obj => (
+      <label className="radio-label">
+        {this.getInputItem(obj)}
+        {obj.label}
+      </label>
+    ));
+  }
+
   render() {
+    /* eslint-disable object-curly-newline */
+    const opts = [
+      { id: 'maze-m0', value: 'm0', def: true, label: 'New' },
+      { id: 'maze-m1', value: 'm1', def: false, label: 'Maze 1' },
+      { id: 'maze-m2', value: 'm2', def: false, label: 'Maze 2' },
+      { id: 'maze-m3', value: 'm3', def: false, label: 'Maze 3' },
+    ];
+    /* eslint-enable object-curly-newline */
+
     return (
       <Flexbox className="App" flexDirection="column">
         <Flexbox
@@ -94,46 +136,10 @@ class App extends Component {
             click <em>process.</em>
           </div>
           <div className="maze-selector">
-            <label className="radio-label">
-              <input
-                type="radio"
-                name="maze"
-                id="maze-m0"
-                value="m0"
-                onChange={this.changeMaze}
-                defaultChecked
-              />New
-            </label>
-            <label className="radio-label">
-              <input
-                type="radio"
-                name="maze"
-                id="maze-m1"
-                value="m1"
-                onChange={this.changeMaze}
-              />Maze 1
-            </label>
-            <label className="radio-label">
-              <input
-                type="radio"
-                name="maze"
-                id="maze-m2"
-                value="m2"
-                onChange={this.changeMaze}
-              />Maze 2
-            </label>
-            <label className="radio-label">
-              <input
-                type="radio"
-                name="maze"
-                id="maze-m3"
-                value="m3"
-                onChange={this.changeMaze}
-              />Maze 3
-            </label>
+            <label className="radio-label">{this.getRadioChoices(opts)}</label>
           </div>
           <textarea
-            rows="20"
+            rows="22"
             cols="100"
             className="aMaze"
             value={this.state.mazeStr}
@@ -162,6 +168,12 @@ class App extends Component {
           />
 
           <ShowMazeGrid mazeArray={this.state.mazeArr} />
+          <SolveMazeGrid
+            mazeArray={this.state.mazeArr}
+            mazeGraph={this.state.mazeGraph}
+            validPath={this.state.validPath}
+            mazePath={this.state.mazePath}
+          />
         </Flexbox>
       </Flexbox>
     );

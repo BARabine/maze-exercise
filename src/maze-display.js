@@ -114,6 +114,30 @@ export const getSolutionMaze = (mazeArr, mazeGraph, pathArr) => {
 };
 
 // ========================================================== //
+// These methods are used to display the maze using CSS Grid
+// ========================================================== //
+export const setGridProps = (rows, cols) => {
+  /* eslint-disable no-undef */
+  const htmlStyles = window.getComputedStyle(document.querySelector('html'));
+  const rowNum = parseInt(htmlStyles.getPropertyValue('--rowNum'), 10);
+  const colNum = parseInt(htmlStyles.getPropertyValue('--colNum'), 10);
+  const size = htmlStyles.getPropertyValue('--gridSize');
+
+  if (rowNum !== rows) {
+    document.documentElement.style.setProperty('--rowNum', rows);
+  }
+
+  if (colNum !== cols) {
+    document.documentElement.style.setProperty('--colNum', cols);
+    if (cols > 60 && size !== '2vh') {
+      document.documentElement.style.setProperty('--gridSize', '2vh');
+    } else if (cols <= 60 && size !== '3vmin') {
+      document.documentElement.style.setProperty('--gridSize', '3vmin');
+    }
+  }
+  /* eslint-enable no-undef */
+};
+
 const GridItem = itemObj => {
   const { item } = itemObj;
   let gridItem = null;
@@ -148,12 +172,13 @@ const GridItem = itemObj => {
 
 export const getMazeGridDisplay = (mazeArr, title) => {
   // console.log(`>> MazeGridArr: ${JSON.stringify(mazeArr)}`);
-  if (mazeArr && mazeArr.length > 0) {
+  if (mazeArr && mazeArr.length > 0 && mazeArr[0].length > 0) {
     // console.log(`>> MazeGridArr Length: ${mazeArr.length}`);
+    const gridSize = `(${mazeArr[0].length} columns x ${mazeArr.length} rows)`;
     return (
       <div className="maze-display" key="grid-maze-display-title">
         <div className="maze-display-title" key="maze-grid-title">
-          {title}
+          {`${title} ${gridSize}`}
         </div>
         <div className="maze-grid-container" key="maze-grid-container">
           {mazeArr.map((row, rIndex) =>
@@ -172,3 +197,4 @@ export const getMazeGridDisplay = (mazeArr, title) => {
   }
   return <div />;
 };
+// ========================================================== //
