@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { setGridProps, getMazeGridDisplay } from './maze-display';
 
 class ShowMazeGrid extends Component {
@@ -42,5 +43,9 @@ class ShowMazeGrid extends Component {
     return getMazeGridDisplay(this.state.mazeArr, 'Show Grid Maze Here:');
   }
 }
+
+ShowMazeGrid.propTypes = {
+  mazeArray: PropTypes.array.isRequired,
+};
 
 export default ShowMazeGrid;

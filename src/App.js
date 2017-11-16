@@ -168,6 +168,7 @@ class App extends Component {
           />
 
           <ShowMazeGrid mazeArray={this.state.mazeArr} />
+
           <SolveMazeGrid
             mazeArray={this.state.mazeArr}
             mazeGraph={this.state.mazeGraph}

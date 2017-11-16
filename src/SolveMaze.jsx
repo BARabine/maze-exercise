@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { getMazeDisplay, getSolutionMaze } from './maze-display';
 
 class SolveMaze extends Component {
@@ -48,5 +49,12 @@ class SolveMaze extends Component {
     );
   }
 }
+
+SolveMaze.propTypes = {
+  mazeArray: PropTypes.array.isRequired,
+  mazeGraph: PropTypes.object.isRequired,
+  validPath: PropTypes.boolean,
+  mazePath: PropTypes.array.isRequired,
+};
 
 export default SolveMaze;

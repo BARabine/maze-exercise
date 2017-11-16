@@ -330,7 +330,7 @@ exports.default = function (instance, Constructor) {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var store = __webpack_require__(44)('wks');
+var store = __webpack_require__(45)('wks');
 var uid = __webpack_require__(35);
 var Symbol = __webpack_require__(11).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
@@ -391,7 +391,7 @@ exports.default = function () {
 
 exports.__esModule = true;
 
-var _typeof2 = __webpack_require__(69);
+var _typeof2 = __webpack_require__(70);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -422,7 +422,7 @@ var _create = __webpack_require__(139);
 
 var _create2 = _interopRequireDefault(_create);
 
-var _typeof2 = __webpack_require__(69);
+var _typeof2 = __webpack_require__(70);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -504,7 +504,7 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 
 var global = __webpack_require__(11);
 var core = __webpack_require__(3);
-var ctx = __webpack_require__(45);
+var ctx = __webpack_require__(46);
 var hide = __webpack_require__(18);
 var PROTOTYPE = 'prototype';
 
@@ -570,8 +570,8 @@ module.exports = $export;
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(19);
-var IE8_DOM_DEFINE = __webpack_require__(67);
-var toPrimitive = __webpack_require__(46);
+var IE8_DOM_DEFINE = __webpack_require__(68);
+var toPrimitive = __webpack_require__(47);
 var dP = Object.defineProperty;
 
 exports.f = __webpack_require__(17) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
@@ -727,8 +727,8 @@ module.exports = function (exec) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(74);
-var defined = __webpack_require__(42);
+var IObject = __webpack_require__(75);
+var defined = __webpack_require__(43);
 module.exports = function (it) {
   return IObject(defined(it));
 };
@@ -951,7 +951,7 @@ if (process.env.NODE_ENV === 'production') {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.13 ToObject(argument)
-var defined = __webpack_require__(42);
+var defined = __webpack_require__(43);
 module.exports = function (it) {
   return Object(defined(it));
 };
@@ -992,8 +992,8 @@ module.exports = {};
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(73);
-var enumBugKeys = __webpack_require__(51);
+var $keys = __webpack_require__(74);
+var enumBugKeys = __webpack_require__(52);
 
 module.exports = Object.keys || function keys(O) {
   return $keys(O, enumBugKeys);
@@ -1224,6 +1224,239 @@ module.exports = warning;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getMazeGridDisplay = exports.setGridProps = exports.getSolutionMaze = exports.getMazeDisplay = undefined;
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _flexboxReact = __webpack_require__(87);
+
+var _flexboxReact2 = _interopRequireDefault(_flexboxReact);
+
+__webpack_require__(90);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ========================================================== //
+// Utilities for displaying the maze
+var MazeItem = function MazeItem(itemObj) {
+  // console.log(`>>> MazeItem: ${JSON.stringify(itemObj)}`);
+  var item = itemObj.item;
+
+  var mazeItem = null;
+  var mazeKey = 'maze-item-' + itemObj.rowIndex + '-' + itemObj.itemIndex;
+  switch (item) {
+    case 'A':
+      // Start path
+      mazeItem = _react2.default.createElement(
+        'span',
+        { className: 'maze-box startpoint', key: mazeKey },
+        'A'
+      );
+      break;
+    case '.':
+      // Open path
+      mazeItem = _react2.default.createElement('span', { className: 'maze-box open', key: mazeKey });
+      break;
+    case 'X':
+      // Open path
+      mazeItem = _react2.default.createElement('span', { className: 'maze-box path', key: mazeKey });
+      break;
+    case 'B':
+      // End path
+      mazeItem = _react2.default.createElement(
+        'span',
+        { className: 'maze-box endpoint', key: mazeKey },
+        'B'
+      );
+      break;
+    default:
+      // Blocked path
+      mazeItem = _react2.default.createElement('span', { className: 'maze-box block', key: mazeKey });
+      break;
+  }
+  return mazeItem;
+};
+
+var MazeRow = function MazeRow(rowObj) {
+  // console.log(`==> MazeRow: ${JSON.stringify(rowObj)}`);
+  var row = rowObj.row,
+      rowIndex = rowObj.rowIndex;
+
+  var rowKey = 'maze-row-' + rowIndex;
+  return _react2.default.createElement(
+    _flexboxReact2.default,
+    { flexDirection: 'row', className: 'maze-row', key: rowKey },
+    row.map(function (mazeItem, itemIndex) {
+      return _react2.default.createElement(MazeItem, {
+        item: mazeItem,
+        rowIndex: rowIndex,
+        itemIndex: itemIndex,
+        key: 'itemkey' + rowIndex + '.' + itemIndex
+      });
+    })
+  );
+};
+
+var getMazeDisplay = exports.getMazeDisplay = function getMazeDisplay(mazeArr, title) {
+  // console.log(`>> MazeArr: ${JSON.stringify(mazeArr)}`);
+  if (mazeArr && mazeArr.length > 1) {
+    // console.log(`>> MazeArr Length: ${mazeArr.length}`);
+    return _react2.default.createElement(
+      'div',
+      { className: 'maze-display', key: 'maze-display' },
+      _react2.default.createElement(
+        'div',
+        { className: 'maze-display-title', key: 'maze-display-title' },
+        title
+      ),
+      _react2.default.createElement(
+        _flexboxReact2.default,
+        {
+          flexDirection: 'column',
+          className: 'maze-container',
+          key: 'maze-container'
+        },
+        mazeArr.map(function (oneRow, rowIndex) {
+          return _react2.default.createElement(MazeRow, {
+            row: oneRow,
+            rowIndex: rowIndex,
+            key: 'rowkey' + rowIndex
+          });
+        })
+      )
+    );
+  }
+  return _react2.default.createElement('div', null);
+};
+
+// ========================================================== //
+// Utility to create a new maze array with solution included
+var getSolutionMaze = exports.getSolutionMaze = function getSolutionMaze(mazeArr, mazeGraph, pathArr) {
+  if (mazeArr) {
+    // console.log(`>> Solution MazeArr Length: ${mazeArr.length}`);
+    var newMaze = [];
+    var startEnd = [mazeGraph.findStartId(), mazeGraph.findEndId()];
+    for (var i = 0; i < mazeArr.length; i++) {
+      var mazeRow = mazeArr[i];
+      var newMazeRow = [];
+      for (var j = 0; j < mazeRow.length; j++) {
+        var id = i + ':' + j;
+        if (pathArr.includes(id) && !startEnd.includes(id)) {
+          newMazeRow.push('X');
+        } else {
+          newMazeRow.push(mazeRow[j]);
+        }
+      }
+      newMaze.push(newMazeRow);
+    }
+    return newMaze;
+  }
+  return null;
+};
+
+// ========================================================== //
+// These methods are used to display the maze using CSS Grid
+// ========================================================== //
+var setGridProps = exports.setGridProps = function setGridProps(rows, cols) {
+  /* eslint-disable no-undef */
+  var htmlStyles = window.getComputedStyle(document.querySelector('html'));
+  var rowNum = parseInt(htmlStyles.getPropertyValue('--rowNum'), 10);
+  var colNum = parseInt(htmlStyles.getPropertyValue('--colNum'), 10);
+  var size = htmlStyles.getPropertyValue('--gridSize');
+
+  if (rowNum !== rows) {
+    document.documentElement.style.setProperty('--rowNum', rows);
+  }
+
+  if (colNum !== cols) {
+    document.documentElement.style.setProperty('--colNum', cols);
+    if (cols > 60 && size !== '2vh') {
+      document.documentElement.style.setProperty('--gridSize', '2vh');
+    } else if (cols <= 60 && size !== '3vmin') {
+      document.documentElement.style.setProperty('--gridSize', '3vmin');
+    }
+  }
+  /* eslint-enable no-undef */
+};
+
+var GridItem = function GridItem(itemObj) {
+  var item = itemObj.item;
+
+  var gridItem = null;
+  var gridKey = 'grid-item-' + itemObj.rIndex + '-' + itemObj.iIndex;
+  switch (item) {
+    case 'A':
+      gridItem = _react2.default.createElement(
+        'div',
+        { className: 'maze-grid-item startpoint', key: gridKey },
+        item
+      );
+      break;
+    case '.':
+      gridItem = _react2.default.createElement('div', { className: 'maze-grid-item open', key: gridKey });
+      break;
+    case 'X':
+      gridItem = _react2.default.createElement('div', { className: 'maze-grid-item path', key: gridKey });
+      break;
+    case 'B':
+      gridItem = _react2.default.createElement(
+        'div',
+        { className: 'maze-grid-item endpoint', key: gridKey },
+        item
+      );
+      break;
+    default:
+      gridItem = _react2.default.createElement('div', { className: 'maze-grid-item block', key: gridKey });
+      break;
+  }
+  return gridItem;
+};
+
+var getMazeGridDisplay = exports.getMazeGridDisplay = function getMazeGridDisplay(mazeArr, title) {
+  // console.log(`>> MazeGridArr: ${JSON.stringify(mazeArr)}`);
+  if (mazeArr && mazeArr.length > 0 && mazeArr[0].length > 0) {
+    // console.log(`>> MazeGridArr Length: ${mazeArr.length}`);
+    var gridSize = '(' + mazeArr[0].length + ' columns x ' + mazeArr.length + ' rows)';
+    return _react2.default.createElement(
+      'div',
+      { className: 'maze-display', key: 'grid-maze-display-title' },
+      _react2.default.createElement(
+        'div',
+        { className: 'maze-display-title', key: 'maze-grid-title' },
+        title + ' ' + gridSize
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'maze-grid-container', key: 'maze-grid-container' },
+        mazeArr.map(function (row, rIndex) {
+          return row.map(function (item, iIndex) {
+            return _react2.default.createElement(GridItem, {
+              item: item,
+              rowIndex: rIndex,
+              itemIndex: iIndex,
+              key: 'gkey' + rIndex + '-' + iIndex
+            });
+          });
+        })
+      )
+    );
+  }
+  return _react2.default.createElement('div', null);
+};
+// ========================================================== //
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -1236,7 +1469,7 @@ module.exports = warning;
 if (process.env.NODE_ENV !== 'production') {
   var invariant = __webpack_require__(15);
   var warning = __webpack_require__(34);
-  var ReactPropTypesSecret = __webpack_require__(39);
+  var ReactPropTypesSecret = __webpack_require__(40);
   var loggedTypeFailures = {};
 }
 
@@ -1287,7 +1520,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1306,7 +1539,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1345,7 +1578,7 @@ var ExecutionEnvironment = {
 module.exports = ExecutionEnvironment;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1416,7 +1649,7 @@ function shallowEqual(objA, objB) {
 module.exports = shallowEqual;
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 // 7.2.1 RequireObjectCoercible(argument)
@@ -1427,10 +1660,10 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var shared = __webpack_require__(44)('keys');
+var shared = __webpack_require__(45)('keys');
 var uid = __webpack_require__(35);
 module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
@@ -1438,7 +1671,7 @@ module.exports = function (key) {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(11);
@@ -1450,7 +1683,7 @@ module.exports = function (key) {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
@@ -1476,7 +1709,7 @@ module.exports = function (fn, that, length) {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.1 ToPrimitive(input [, PreferredType])
@@ -1494,7 +1727,7 @@ module.exports = function (it, S) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports) {
 
 // 7.1.4 ToInteger
@@ -1506,28 +1739,28 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 module.exports = true;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject = __webpack_require__(19);
 var dPs = __webpack_require__(117);
-var enumBugKeys = __webpack_require__(51);
-var IE_PROTO = __webpack_require__(43)('IE_PROTO');
+var enumBugKeys = __webpack_require__(52);
+var IE_PROTO = __webpack_require__(44)('IE_PROTO');
 var Empty = function () { /* empty */ };
 var PROTOTYPE = 'prototype';
 
 // Create object with fake `null` prototype: use iframe Object with cleared prototype
 var createDict = function () {
   // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(68)('iframe');
+  var iframe = __webpack_require__(69)('iframe');
   var i = enumBugKeys.length;
   var lt = '<';
   var gt = '>';
@@ -1560,7 +1793,7 @@ module.exports = Object.create || function create(O, Properties) {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -1571,7 +1804,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports) {
 
 // IE 8- don't enum bug keys
@@ -1581,7 +1814,7 @@ module.exports = (
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var def = __webpack_require__(13).f;
@@ -1594,20 +1827,20 @@ module.exports = function (it, tag, stat) {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.f = __webpack_require__(5);
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(11);
 var core = __webpack_require__(3);
-var LIBRARY = __webpack_require__(48);
-var wksExt = __webpack_require__(53);
+var LIBRARY = __webpack_require__(49);
+var wksExt = __webpack_require__(54);
 var defineProperty = __webpack_require__(13).f;
 module.exports = function (name) {
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
@@ -1616,14 +1849,14 @@ module.exports = function (name) {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 exports.f = Object.getOwnPropertySymbols;
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1872,7 +2105,7 @@ function lighten(color, coefficient) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2168,7 +2401,7 @@ var darkWhite = exports.darkWhite = 'rgba(255, 255, 255, 0.87)';
 var lightWhite = exports.lightWhite = 'rgba(255, 255, 255, 0.54)';
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2184,7 +2417,7 @@ function capitalizeString(str) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2202,7 +2435,7 @@ function isPrefixedValue(value) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2218,7 +2451,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2299,7 +2532,7 @@ module.exports = EventListener;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2342,7 +2575,7 @@ function containsNode(outerNode, innerNode) {
 module.exports = containsNode;
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2372,7 +2605,7 @@ function focusNode(node) {
 module.exports = focusNode;
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2414,13 +2647,13 @@ function getActiveElement(doc) /*?DOMElement*/{
 module.exports = getActiveElement;
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 var has = __webpack_require__(16);
 var toObject = __webpack_require__(27);
-var IE_PROTO = __webpack_require__(43)('IE_PROTO');
+var IE_PROTO = __webpack_require__(44)('IE_PROTO');
 var ObjectProto = Object.prototype;
 
 module.exports = Object.getPrototypeOf || function (O) {
@@ -2433,7 +2666,7 @@ module.exports = Object.getPrototypeOf || function (O) {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // most Object methods by ES6 should accept primitives
@@ -2449,16 +2682,16 @@ module.exports = function (KEY, exec) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = !__webpack_require__(17) && !__webpack_require__(20)(function () {
-  return Object.defineProperty(__webpack_require__(68)('div'), 'a', { get: function () { return 7; } }).a != 7;
+  return Object.defineProperty(__webpack_require__(69)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(28);
@@ -2471,7 +2704,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2498,7 +2731,7 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2506,7 +2739,7 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 var $at = __webpack_require__(115)(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__(71)(String, 'String', function (iterated) {
+__webpack_require__(72)(String, 'String', function (iterated) {
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -2522,20 +2755,20 @@ __webpack_require__(71)(String, 'String', function (iterated) {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var LIBRARY = __webpack_require__(48);
+var LIBRARY = __webpack_require__(49);
 var $export = __webpack_require__(12);
-var redefine = __webpack_require__(72);
+var redefine = __webpack_require__(73);
 var hide = __webpack_require__(18);
 var has = __webpack_require__(16);
 var Iterators = __webpack_require__(30);
 var $iterCreate = __webpack_require__(116);
-var setToStringTag = __webpack_require__(52);
-var getPrototypeOf = __webpack_require__(65);
+var setToStringTag = __webpack_require__(53);
+var getPrototypeOf = __webpack_require__(66);
 var ITERATOR = __webpack_require__(5)('iterator');
 var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
 var FF_ITERATOR = '@@iterator';
@@ -2599,20 +2832,20 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(18);
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var has = __webpack_require__(16);
 var toIObject = __webpack_require__(21);
 var arrayIndexOf = __webpack_require__(118)(false);
-var IE_PROTO = __webpack_require__(43)('IE_PROTO');
+var IE_PROTO = __webpack_require__(44)('IE_PROTO');
 
 module.exports = function (object, names) {
   var O = toIObject(object);
@@ -2629,11 +2862,11 @@ module.exports = function (object, names) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = __webpack_require__(50);
+var cof = __webpack_require__(51);
 // eslint-disable-next-line no-prototype-builtins
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
   return cof(it) == 'String' ? it.split('') : Object(it);
@@ -2641,11 +2874,11 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.15 ToLength
-var toInteger = __webpack_require__(47);
+var toInteger = __webpack_require__(48);
 var min = Math.min;
 module.exports = function (it) {
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
@@ -2653,12 +2886,12 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = __webpack_require__(73);
-var hiddenKeys = __webpack_require__(51).concat('length', 'prototype');
+var $keys = __webpack_require__(74);
+var hiddenKeys = __webpack_require__(52).concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return $keys(O, hiddenKeys);
@@ -2666,15 +2899,15 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var pIE = __webpack_require__(36);
 var createDesc = __webpack_require__(29);
 var toIObject = __webpack_require__(21);
-var toPrimitive = __webpack_require__(46);
+var toPrimitive = __webpack_require__(47);
 var has = __webpack_require__(16);
-var IE8_DOM_DEFINE = __webpack_require__(67);
+var IE8_DOM_DEFINE = __webpack_require__(68);
 var gOPD = Object.getOwnPropertyDescriptor;
 
 exports.f = __webpack_require__(17) ? gOPD : function getOwnPropertyDescriptor(O, P) {
@@ -2688,7 +2921,7 @@ exports.f = __webpack_require__(17) ? gOPD : function getOwnPropertyDescriptor(O
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2696,7 +2929,7 @@ exports.f = __webpack_require__(17) ? gOPD : function getOwnPropertyDescriptor(O
 
 exports.__esModule = true;
 
-var _from = __webpack_require__(79);
+var _from = __webpack_require__(80);
 
 var _from2 = _interopRequireDefault(_from);
 
@@ -2715,13 +2948,13 @@ exports.default = function (arr) {
 };
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(143), __esModule: true };
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2745,7 +2978,7 @@ function prefixValue(plugins, property, value, style, metaData) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2773,7 +3006,7 @@ function addNewValuesOnly(list, values) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2789,7 +3022,7 @@ function isObject(value) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2812,7 +3045,7 @@ function hyphenateProperty(property) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports) {
 
 /*
@@ -2894,7 +3127,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -3253,7 +3486,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3273,7 +3506,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _Flexbox2.default;
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3281,7 +3514,7 @@ exports.default = _Flexbox2.default;
 
 exports.__esModule = true;
 
-var _shallowEqual = __webpack_require__(41);
+var _shallowEqual = __webpack_require__(42);
 
 var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
@@ -3290,7 +3523,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _shallowEqual2.default;
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3566,7 +3799,7 @@ module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -3580,7 +3813,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(85)(content, options);
+var update = __webpack_require__(86)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -3595,239 +3828,6 @@ if(false) {
 	// When the module is disposed, remove the <style> tags
 	module.hot.dispose(function() { update(); });
 }
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getMazeGridDisplay = exports.setGridProps = exports.getSolutionMaze = exports.getMazeDisplay = undefined;
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _flexboxReact = __webpack_require__(86);
-
-var _flexboxReact2 = _interopRequireDefault(_flexboxReact);
-
-__webpack_require__(89);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// ========================================================== //
-// Utilities for displaying the maze
-var MazeItem = function MazeItem(itemObj) {
-  // console.log(`>>> MazeItem: ${JSON.stringify(itemObj)}`);
-  var item = itemObj.item;
-
-  var mazeItem = null;
-  var mazeKey = 'maze-item-' + itemObj.rowIndex + '-' + itemObj.itemIndex;
-  switch (item) {
-    case 'A':
-      // Start path
-      mazeItem = _react2.default.createElement(
-        'span',
-        { className: 'maze-box startpoint', key: mazeKey },
-        'A'
-      );
-      break;
-    case '.':
-      // Open path
-      mazeItem = _react2.default.createElement('span', { className: 'maze-box open', key: mazeKey });
-      break;
-    case 'X':
-      // Open path
-      mazeItem = _react2.default.createElement('span', { className: 'maze-box path', key: mazeKey });
-      break;
-    case 'B':
-      // End path
-      mazeItem = _react2.default.createElement(
-        'span',
-        { className: 'maze-box endpoint', key: mazeKey },
-        'B'
-      );
-      break;
-    default:
-      // Blocked path
-      mazeItem = _react2.default.createElement('span', { className: 'maze-box block', key: mazeKey });
-      break;
-  }
-  return mazeItem;
-};
-
-var MazeRow = function MazeRow(rowObj) {
-  // console.log(`==> MazeRow: ${JSON.stringify(rowObj)}`);
-  var row = rowObj.row,
-      rowIndex = rowObj.rowIndex;
-
-  var rowKey = 'maze-row-' + rowIndex;
-  return _react2.default.createElement(
-    _flexboxReact2.default,
-    { flexDirection: 'row', className: 'maze-row', key: rowKey },
-    row.map(function (mazeItem, itemIndex) {
-      return _react2.default.createElement(MazeItem, {
-        item: mazeItem,
-        rowIndex: rowIndex,
-        itemIndex: itemIndex,
-        key: 'itemkey' + rowIndex + '.' + itemIndex
-      });
-    })
-  );
-};
-
-var getMazeDisplay = exports.getMazeDisplay = function getMazeDisplay(mazeArr, title) {
-  // console.log(`>> MazeArr: ${JSON.stringify(mazeArr)}`);
-  if (mazeArr && mazeArr.length > 1) {
-    // console.log(`>> MazeArr Length: ${mazeArr.length}`);
-    return _react2.default.createElement(
-      'div',
-      { className: 'maze-display', key: 'maze-display' },
-      _react2.default.createElement(
-        'div',
-        { className: 'maze-display-title', key: 'maze-display-title' },
-        title
-      ),
-      _react2.default.createElement(
-        _flexboxReact2.default,
-        {
-          flexDirection: 'column',
-          className: 'maze-container',
-          key: 'maze-container'
-        },
-        mazeArr.map(function (oneRow, rowIndex) {
-          return _react2.default.createElement(MazeRow, {
-            row: oneRow,
-            rowIndex: rowIndex,
-            key: 'rowkey' + rowIndex
-          });
-        })
-      )
-    );
-  }
-  return _react2.default.createElement('div', null);
-};
-
-// ========================================================== //
-// Utility to create a new maze array with solution included
-var getSolutionMaze = exports.getSolutionMaze = function getSolutionMaze(mazeArr, mazeGraph, pathArr) {
-  if (mazeArr) {
-    // console.log(`>> Solution MazeArr Length: ${mazeArr.length}`);
-    var newMaze = [];
-    var startEnd = [mazeGraph.findStartId(), mazeGraph.findEndId()];
-    for (var i = 0; i < mazeArr.length; i++) {
-      var mazeRow = mazeArr[i];
-      var newMazeRow = [];
-      for (var j = 0; j < mazeRow.length; j++) {
-        var id = i + ':' + j;
-        if (pathArr.includes(id) && !startEnd.includes(id)) {
-          newMazeRow.push('X');
-        } else {
-          newMazeRow.push(mazeRow[j]);
-        }
-      }
-      newMaze.push(newMazeRow);
-    }
-    return newMaze;
-  }
-  return null;
-};
-
-// ========================================================== //
-// These methods are used to display the maze using CSS Grid
-// ========================================================== //
-var setGridProps = exports.setGridProps = function setGridProps(rows, cols) {
-  /* eslint-disable no-undef */
-  var htmlStyles = window.getComputedStyle(document.querySelector('html'));
-  var rowNum = parseInt(htmlStyles.getPropertyValue('--rowNum'), 10);
-  var colNum = parseInt(htmlStyles.getPropertyValue('--colNum'), 10);
-  var size = htmlStyles.getPropertyValue('--gridSize');
-
-  if (rowNum !== rows) {
-    document.documentElement.style.setProperty('--rowNum', rows);
-  }
-
-  if (colNum !== cols) {
-    document.documentElement.style.setProperty('--colNum', cols);
-    if (cols > 60 && size !== '2vh') {
-      document.documentElement.style.setProperty('--gridSize', '2vh');
-    } else if (cols <= 60 && size !== '3vmin') {
-      document.documentElement.style.setProperty('--gridSize', '3vmin');
-    }
-  }
-  /* eslint-enable no-undef */
-};
-
-var GridItem = function GridItem(itemObj) {
-  var item = itemObj.item;
-
-  var gridItem = null;
-  var gridKey = 'grid-item-' + itemObj.rIndex + '-' + itemObj.iIndex;
-  switch (item) {
-    case 'A':
-      gridItem = _react2.default.createElement(
-        'div',
-        { className: 'maze-grid-item startpoint', key: gridKey },
-        item
-      );
-      break;
-    case '.':
-      gridItem = _react2.default.createElement('div', { className: 'maze-grid-item open', key: gridKey });
-      break;
-    case 'X':
-      gridItem = _react2.default.createElement('div', { className: 'maze-grid-item path', key: gridKey });
-      break;
-    case 'B':
-      gridItem = _react2.default.createElement(
-        'div',
-        { className: 'maze-grid-item endpoint', key: gridKey },
-        item
-      );
-      break;
-    default:
-      gridItem = _react2.default.createElement('div', { className: 'maze-grid-item block', key: gridKey });
-      break;
-  }
-  return gridItem;
-};
-
-var getMazeGridDisplay = exports.getMazeGridDisplay = function getMazeGridDisplay(mazeArr, title) {
-  // console.log(`>> MazeGridArr: ${JSON.stringify(mazeArr)}`);
-  if (mazeArr && mazeArr.length > 0 && mazeArr[0].length > 0) {
-    // console.log(`>> MazeGridArr Length: ${mazeArr.length}`);
-    var gridSize = '(' + mazeArr[0].length + ' columns x ' + mazeArr.length + ' rows)';
-    return _react2.default.createElement(
-      'div',
-      { className: 'maze-display', key: 'grid-maze-display-title' },
-      _react2.default.createElement(
-        'div',
-        { className: 'maze-display-title', key: 'maze-grid-title' },
-        title + ' ' + gridSize
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'maze-grid-container', key: 'maze-grid-container' },
-        mazeArr.map(function (row, rIndex) {
-          return row.map(function (item, iIndex) {
-            return _react2.default.createElement(GridItem, {
-              item: item,
-              rowIndex: rIndex,
-              itemIndex: iIndex,
-              key: 'gkey' + rIndex + '-' + iIndex
-            });
-          });
-        })
-      )
-    );
-  }
-  return _react2.default.createElement('div', null);
-};
-// ========================================================== //
 
 /***/ }),
 /* 91 */
@@ -3854,7 +3854,7 @@ var _App = __webpack_require__(192);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _registerServiceWorker = __webpack_require__(228);
+var _registerServiceWorker = __webpack_require__(229);
 
 var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
@@ -3925,7 +3925,7 @@ var require$$0 = __webpack_require__(34);
 var emptyObject = __webpack_require__(33);
 var invariant = __webpack_require__(15);
 var emptyFunction = __webpack_require__(10);
-var checkPropTypes = __webpack_require__(38);
+var checkPropTypes = __webpack_require__(39);
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -5620,7 +5620,7 @@ module.exports = ReactEntry;
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(1);__webpack_require__(15);var l=__webpack_require__(40),n=__webpack_require__(25),ba=__webpack_require__(61),ca=__webpack_require__(10),da=__webpack_require__(33),ea=__webpack_require__(41),fa=__webpack_require__(62),ha=__webpack_require__(63),ia=__webpack_require__(64);
+var aa=__webpack_require__(1);__webpack_require__(15);var l=__webpack_require__(41),n=__webpack_require__(25),ba=__webpack_require__(62),ca=__webpack_require__(10),da=__webpack_require__(33),ea=__webpack_require__(42),fa=__webpack_require__(63),ha=__webpack_require__(64),ia=__webpack_require__(65);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -5947,9 +5947,9 @@ if (process.env.NODE_ENV !== "production") {
 
 var react = __webpack_require__(1);
 var invariant = __webpack_require__(15);
-var ExecutionEnvironment = __webpack_require__(40);
+var ExecutionEnvironment = __webpack_require__(41);
 var _assign = __webpack_require__(25);
-var EventListener = __webpack_require__(61);
+var EventListener = __webpack_require__(62);
 var require$$0 = __webpack_require__(34);
 var hyphenateStyleName = __webpack_require__(98);
 var emptyFunction = __webpack_require__(10);
@@ -5957,11 +5957,11 @@ var camelizeStyleName = __webpack_require__(100);
 var performanceNow = __webpack_require__(102);
 var propTypes = __webpack_require__(2);
 var emptyObject = __webpack_require__(33);
-var checkPropTypes = __webpack_require__(38);
-var shallowEqual = __webpack_require__(41);
-var containsNode = __webpack_require__(62);
-var focusNode = __webpack_require__(63);
-var getActiveElement = __webpack_require__(64);
+var checkPropTypes = __webpack_require__(39);
+var shallowEqual = __webpack_require__(42);
+var containsNode = __webpack_require__(63);
+var focusNode = __webpack_require__(64);
+var getActiveElement = __webpack_require__(65);
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -23362,7 +23362,7 @@ module.exports = performanceNow;
 
 
 
-var ExecutionEnvironment = __webpack_require__(40);
+var ExecutionEnvironment = __webpack_require__(41);
 
 var performance;
 
@@ -23391,8 +23391,8 @@ var invariant = __webpack_require__(15);
 var warning = __webpack_require__(34);
 var assign = __webpack_require__(25);
 
-var ReactPropTypesSecret = __webpack_require__(39);
-var checkPropTypes = __webpack_require__(38);
+var ReactPropTypesSecret = __webpack_require__(40);
+var checkPropTypes = __webpack_require__(39);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -23938,7 +23938,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 var emptyFunction = __webpack_require__(10);
 var invariant = __webpack_require__(15);
-var ReactPropTypesSecret = __webpack_require__(39);
+var ReactPropTypesSecret = __webpack_require__(40);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -24078,9 +24078,9 @@ module.exports = __webpack_require__(3).Object.getPrototypeOf;
 
 // 19.1.2.9 Object.getPrototypeOf(O)
 var toObject = __webpack_require__(27);
-var $getPrototypeOf = __webpack_require__(65);
+var $getPrototypeOf = __webpack_require__(66);
 
-__webpack_require__(66)('getPrototypeOf', function () {
+__webpack_require__(67)('getPrototypeOf', function () {
   return function getPrototypeOf(it) {
     return $getPrototypeOf(toObject(it));
   };
@@ -24133,17 +24133,17 @@ module.exports = { "default": __webpack_require__(114), __esModule: true };
 /* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(70);
+__webpack_require__(71);
 __webpack_require__(121);
-module.exports = __webpack_require__(53).f('iterator');
+module.exports = __webpack_require__(54).f('iterator');
 
 
 /***/ }),
 /* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__(47);
-var defined = __webpack_require__(42);
+var toInteger = __webpack_require__(48);
+var defined = __webpack_require__(43);
 // true  -> String#at
 // false -> String#codePointAt
 module.exports = function (TO_STRING) {
@@ -24167,9 +24167,9 @@ module.exports = function (TO_STRING) {
 
 "use strict";
 
-var create = __webpack_require__(49);
+var create = __webpack_require__(50);
 var descriptor = __webpack_require__(29);
-var setToStringTag = __webpack_require__(52);
+var setToStringTag = __webpack_require__(53);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
@@ -24207,7 +24207,7 @@ module.exports = __webpack_require__(17) ? Object.defineProperties : function de
 // false -> Array#indexOf
 // true  -> Array#includes
 var toIObject = __webpack_require__(21);
-var toLength = __webpack_require__(75);
+var toLength = __webpack_require__(76);
 var toAbsoluteIndex = __webpack_require__(119);
 module.exports = function (IS_INCLUDES) {
   return function ($this, el, fromIndex) {
@@ -24233,7 +24233,7 @@ module.exports = function (IS_INCLUDES) {
 /* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__(47);
+var toInteger = __webpack_require__(48);
 var max = Math.max;
 var min = Math.min;
 module.exports = function (index, length) {
@@ -24290,7 +24290,7 @@ var toIObject = __webpack_require__(21);
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(71)(Array, 'Array', function (iterated, kind) {
+module.exports = __webpack_require__(72)(Array, 'Array', function (iterated, kind) {
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -24360,24 +24360,24 @@ var global = __webpack_require__(11);
 var has = __webpack_require__(16);
 var DESCRIPTORS = __webpack_require__(17);
 var $export = __webpack_require__(12);
-var redefine = __webpack_require__(72);
+var redefine = __webpack_require__(73);
 var META = __webpack_require__(128).KEY;
 var $fails = __webpack_require__(20);
-var shared = __webpack_require__(44);
-var setToStringTag = __webpack_require__(52);
+var shared = __webpack_require__(45);
+var setToStringTag = __webpack_require__(53);
 var uid = __webpack_require__(35);
 var wks = __webpack_require__(5);
-var wksExt = __webpack_require__(53);
-var wksDefine = __webpack_require__(54);
+var wksExt = __webpack_require__(54);
+var wksDefine = __webpack_require__(55);
 var enumKeys = __webpack_require__(129);
 var isArray = __webpack_require__(130);
 var anObject = __webpack_require__(19);
 var toIObject = __webpack_require__(21);
-var toPrimitive = __webpack_require__(46);
+var toPrimitive = __webpack_require__(47);
 var createDesc = __webpack_require__(29);
-var _create = __webpack_require__(49);
+var _create = __webpack_require__(50);
 var gOPNExt = __webpack_require__(131);
-var $GOPD = __webpack_require__(77);
+var $GOPD = __webpack_require__(78);
 var $DP = __webpack_require__(13);
 var $keys = __webpack_require__(31);
 var gOPD = $GOPD.f;
@@ -24502,11 +24502,11 @@ if (!USE_NATIVE) {
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
-  __webpack_require__(76).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(77).f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(36).f = $propertyIsEnumerable;
-  __webpack_require__(55).f = $getOwnPropertySymbols;
+  __webpack_require__(56).f = $getOwnPropertySymbols;
 
-  if (DESCRIPTORS && !__webpack_require__(48)) {
+  if (DESCRIPTORS && !__webpack_require__(49)) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
@@ -24655,7 +24655,7 @@ var meta = module.exports = {
 
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(31);
-var gOPS = __webpack_require__(55);
+var gOPS = __webpack_require__(56);
 var pIE = __webpack_require__(36);
 module.exports = function (it) {
   var result = getKeys(it);
@@ -24675,7 +24675,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.2 IsArray(argument)
-var cof = __webpack_require__(50);
+var cof = __webpack_require__(51);
 module.exports = Array.isArray || function isArray(arg) {
   return cof(arg) == 'Array';
 };
@@ -24687,7 +24687,7 @@ module.exports = Array.isArray || function isArray(arg) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = __webpack_require__(21);
-var gOPN = __webpack_require__(76).f;
+var gOPN = __webpack_require__(77).f;
 var toString = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -24716,14 +24716,14 @@ module.exports.f = function getOwnPropertyNames(it) {
 /* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(54)('asyncIterator');
+__webpack_require__(55)('asyncIterator');
 
 
 /***/ }),
 /* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(54)('observable');
+__webpack_require__(55)('observable');
 
 
 /***/ }),
@@ -24765,7 +24765,7 @@ module.exports = {
   set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
     function (test, buggy, set) {
       try {
-        set = __webpack_require__(45)(Function.call, __webpack_require__(77).f(Object.prototype, '__proto__').set, 2);
+        set = __webpack_require__(46)(Function.call, __webpack_require__(78).f(Object.prototype, '__proto__').set, 2);
         set(test, []);
         buggy = !(test instanceof Array);
       } catch (e) { buggy = true; }
@@ -24803,7 +24803,7 @@ module.exports = function create(P, D) {
 
 var $export = __webpack_require__(12);
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', { create: __webpack_require__(49) });
+$export($export.S, 'Object', { create: __webpack_require__(50) });
 
 
 /***/ }),
@@ -24817,7 +24817,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toConsumableArray2 = __webpack_require__(78);
+var _toConsumableArray2 = __webpack_require__(79);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -24827,7 +24827,7 @@ var _lodash = __webpack_require__(151);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _colorManipulator = __webpack_require__(56);
+var _colorManipulator = __webpack_require__(57);
 
 var _lightBaseTheme = __webpack_require__(154);
 
@@ -24857,7 +24857,7 @@ var _typography = __webpack_require__(188);
 
 var _typography2 = _interopRequireDefault(_typography);
 
-var _colors = __webpack_require__(57);
+var _colors = __webpack_require__(58);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25198,7 +25198,7 @@ function getMuiTheme(muiTheme) {
 /* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(70);
+__webpack_require__(71);
 __webpack_require__(144);
 module.exports = __webpack_require__(3).Array.from;
 
@@ -25209,12 +25209,12 @@ module.exports = __webpack_require__(3).Array.from;
 
 "use strict";
 
-var ctx = __webpack_require__(45);
+var ctx = __webpack_require__(46);
 var $export = __webpack_require__(12);
 var toObject = __webpack_require__(27);
 var call = __webpack_require__(145);
 var isArrayIter = __webpack_require__(146);
-var toLength = __webpack_require__(75);
+var toLength = __webpack_require__(76);
 var createProperty = __webpack_require__(147);
 var getIterFn = __webpack_require__(148);
 
@@ -25313,7 +25313,7 @@ module.exports = __webpack_require__(3).getIteratorMethod = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = __webpack_require__(50);
+var cof = __webpack_require__(51);
 var TAG = __webpack_require__(5)('toStringTag');
 // ES3 wrong here
 var ARG = cof(function () { return arguments; }()) == 'Arguments';
@@ -27645,9 +27645,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _colors = __webpack_require__(57);
+var _colors = __webpack_require__(58);
 
-var _colorManipulator = __webpack_require__(56);
+var _colorManipulator = __webpack_require__(57);
 
 var _spacing = __webpack_require__(155);
 
@@ -27835,15 +27835,15 @@ var _prefixProperty = __webpack_require__(159);
 
 var _prefixProperty2 = _interopRequireDefault(_prefixProperty);
 
-var _prefixValue = __webpack_require__(80);
+var _prefixValue = __webpack_require__(81);
 
 var _prefixValue2 = _interopRequireDefault(_prefixValue);
 
-var _addNewValuesOnly = __webpack_require__(81);
+var _addNewValuesOnly = __webpack_require__(82);
 
 var _addNewValuesOnly2 = _interopRequireDefault(_addNewValuesOnly);
 
-var _isObject = __webpack_require__(82);
+var _isObject = __webpack_require__(83);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
@@ -27906,7 +27906,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = prefixProperty;
 
-var _capitalizeString = __webpack_require__(58);
+var _capitalizeString = __webpack_require__(59);
 
 var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
 
@@ -27945,19 +27945,19 @@ var _getPrefixedKeyframes = __webpack_require__(164);
 
 var _getPrefixedKeyframes2 = _interopRequireDefault(_getPrefixedKeyframes);
 
-var _capitalizeString = __webpack_require__(58);
+var _capitalizeString = __webpack_require__(59);
 
 var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
 
-var _addNewValuesOnly = __webpack_require__(81);
+var _addNewValuesOnly = __webpack_require__(82);
 
 var _addNewValuesOnly2 = _interopRequireDefault(_addNewValuesOnly);
 
-var _isObject = __webpack_require__(82);
+var _isObject = __webpack_require__(83);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
-var _prefixValue = __webpack_require__(80);
+var _prefixValue = __webpack_require__(81);
 
 var _prefixValue2 = _interopRequireDefault(_prefixValue);
 
@@ -29227,7 +29227,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = transition;
 
-var _hyphenateProperty = __webpack_require__(83);
+var _hyphenateProperty = __webpack_require__(84);
 
 var _hyphenateProperty2 = _interopRequireDefault(_hyphenateProperty);
 
@@ -29355,7 +29355,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = calc;
 
-var _isPrefixedValue = __webpack_require__(59);
+var _isPrefixedValue = __webpack_require__(60);
 
 var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
 
@@ -29486,7 +29486,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = gradient;
 
-var _isPrefixedValue = __webpack_require__(59);
+var _isPrefixedValue = __webpack_require__(60);
 
 var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
 
@@ -29556,15 +29556,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = transition;
 
-var _hyphenateProperty = __webpack_require__(83);
+var _hyphenateProperty = __webpack_require__(84);
 
 var _hyphenateProperty2 = _interopRequireDefault(_hyphenateProperty);
 
-var _isPrefixedValue = __webpack_require__(59);
+var _isPrefixedValue = __webpack_require__(60);
 
 var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
 
-var _capitalizeString = __webpack_require__(58);
+var _capitalizeString = __webpack_require__(59);
 
 var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
 
@@ -29801,7 +29801,7 @@ module.exports = __webpack_require__(3).Object.keys;
 var toObject = __webpack_require__(27);
 var $keys = __webpack_require__(31);
 
-__webpack_require__(66)('keys', function () {
+__webpack_require__(67)('keys', function () {
   return function keys(it) {
     return $keys(toObject(it));
   };
@@ -29854,7 +29854,7 @@ var _classCallCheck2 = __webpack_require__(4);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _colors = __webpack_require__(57);
+var _colors = __webpack_require__(58);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29895,7 +29895,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(85)(content, options);
+var update = __webpack_require__(86)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -29915,7 +29915,7 @@ if(false) {
 /* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(84)(undefined);
+exports = module.exports = __webpack_require__(85)(undefined);
 // imports
 
 
@@ -30037,7 +30037,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _flexboxReact = __webpack_require__(86);
+var _flexboxReact = __webpack_require__(87);
 
 var _flexboxReact2 = _interopRequireDefault(_flexboxReact);
 
@@ -30045,7 +30045,7 @@ var _RaisedButton = __webpack_require__(200);
 
 var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
-__webpack_require__(89);
+__webpack_require__(90);
 
 var _peoplenetlogo = __webpack_require__(222);
 
@@ -30065,11 +30065,11 @@ var _ShowMazeGrid = __webpack_require__(226);
 
 var _ShowMazeGrid2 = _interopRequireDefault(_ShowMazeGrid);
 
-var _SolveMazeGrid = __webpack_require__(229);
+var _SolveMazeGrid = __webpack_require__(227);
 
 var _SolveMazeGrid2 = _interopRequireDefault(_SolveMazeGrid);
 
-var _mazeExamples = __webpack_require__(227);
+var _mazeExamples = __webpack_require__(228);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34473,7 +34473,7 @@ var _transitions = __webpack_require__(32);
 
 var _transitions2 = _interopRequireDefault(_transitions);
 
-var _colorManipulator = __webpack_require__(56);
+var _colorManipulator = __webpack_require__(57);
 
 var _EnhancedButton = __webpack_require__(206);
 
@@ -34942,10 +34942,10 @@ $export($export.S + $export.F, 'Object', { assign: __webpack_require__(205) });
 
 // 19.1.2.1 Object.assign(target, source, ...)
 var getKeys = __webpack_require__(31);
-var gOPS = __webpack_require__(55);
+var gOPS = __webpack_require__(56);
 var pIE = __webpack_require__(36);
 var toObject = __webpack_require__(27);
-var IObject = __webpack_require__(74);
+var IObject = __webpack_require__(75);
 var $assign = Object.assign;
 
 // should work with symbols and should have deterministic property order (V8 bug)
@@ -35623,11 +35623,11 @@ var _reactDom = __webpack_require__(26);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _shallowEqual = __webpack_require__(87);
+var _shallowEqual = __webpack_require__(88);
 
 var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-var _autoPrefix = __webpack_require__(60);
+var _autoPrefix = __webpack_require__(61);
 
 var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
@@ -35833,7 +35833,7 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _TransitionGroup = __webpack_require__(88);
+var _TransitionGroup = __webpack_require__(89);
 
 var _TransitionGroup2 = _interopRequireDefault(_TransitionGroup);
 
@@ -36095,7 +36095,7 @@ var _reactDom = __webpack_require__(26);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _autoPrefix = __webpack_require__(60);
+var _autoPrefix = __webpack_require__(61);
 
 var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
@@ -36228,7 +36228,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toConsumableArray2 = __webpack_require__(78);
+var _toConsumableArray2 = __webpack_require__(79);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -36272,7 +36272,7 @@ var _reactDom = __webpack_require__(26);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _TransitionGroup = __webpack_require__(88);
+var _TransitionGroup = __webpack_require__(89);
 
 var _TransitionGroup2 = _interopRequireDefault(_TransitionGroup);
 
@@ -36544,7 +36544,7 @@ exports.default = TouchRipple;
 
 exports.__esModule = true;
 
-var _from = __webpack_require__(79);
+var _from = __webpack_require__(80);
 
 var _from2 = _interopRequireDefault(_from);
 
@@ -36639,11 +36639,11 @@ var _reactDom = __webpack_require__(26);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _shallowEqual = __webpack_require__(87);
+var _shallowEqual = __webpack_require__(88);
 
 var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-var _autoPrefix = __webpack_require__(60);
+var _autoPrefix = __webpack_require__(61);
 
 var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
@@ -36986,7 +36986,7 @@ exports.default = {
 /* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(84)(undefined);
+exports = module.exports = __webpack_require__(85)(undefined);
 // imports
 
 
@@ -37339,7 +37339,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(1);
 
-var _mazeDisplay = __webpack_require__(90);
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _mazeDisplay = __webpack_require__(38);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -37391,6 +37397,10 @@ var ShowMaze = function (_Component) {
   return ShowMaze;
 }(_react.Component);
 
+ShowMaze.propTypes = {
+  mazeArray: _propTypes2.default.array.isRequired
+};
+
 exports.default = ShowMaze;
 
 /***/ }),
@@ -37408,7 +37418,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(1);
 
-var _mazeDisplay = __webpack_require__(90);
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _mazeDisplay = __webpack_require__(38);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -37468,6 +37484,13 @@ var SolveMaze = function (_Component) {
   return SolveMaze;
 }(_react.Component);
 
+SolveMaze.propTypes = {
+  mazeArray: _propTypes2.default.array.isRequired,
+  mazeGraph: _propTypes2.default.object.isRequired,
+  validPath: _propTypes2.default.boolean,
+  mazePath: _propTypes2.default.array.isRequired
+};
+
 exports.default = SolveMaze;
 
 /***/ }),
@@ -37485,7 +37508,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(1);
 
-var _mazeDisplay = __webpack_require__(90);
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _mazeDisplay = __webpack_require__(38);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -37549,10 +37578,117 @@ var ShowMazeGrid = function (_Component) {
   return ShowMazeGrid;
 }(_react.Component);
 
+ShowMazeGrid.propTypes = {
+  mazeArray: _propTypes2.default.array.isRequired
+};
+
 exports.default = ShowMazeGrid;
 
 /***/ }),
 /* 227 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _mazeDisplay = __webpack_require__(38);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SolveMazeGrid = function (_Component) {
+  _inherits(SolveMazeGrid, _Component);
+
+  function SolveMazeGrid(props) {
+    _classCallCheck(this, SolveMazeGrid);
+
+    // console.log(`>>Inside SolveMazeGrid constructor, props = ${JSON.stringify(props)}`);
+    var _this = _possibleConstructorReturn(this, (SolveMazeGrid.__proto__ || Object.getPrototypeOf(SolveMazeGrid)).call(this, props));
+
+    _this.state = {
+      mazeArr: null,
+      mazeGraph: null,
+      validPath: false,
+      mazePath: []
+    };
+    _this.updateCssProps = _this.updateCssProps.bind(_this);
+    return _this;
+  }
+
+  _createClass(SolveMazeGrid, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.mazeArray !== null) {
+        // console.log(`>>Inside SolveMazeGrid componentWillReceiveProps, nextProps = ${JSON.stringify(nextProps)}`);
+        this.setState({
+          mazeArr: nextProps.mazeArray,
+          mazeGraph: nextProps.mazeGraph,
+          validPath: nextProps.validPath,
+          mazePath: nextProps.mazePath
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
+      if (nextProps.mazePath !== this.state.mazePath) {
+        // console.log(`>>Inside SolveMaze shouldComponentUpdate, nextProps = ${JSON.stringify(nextProps)}`);
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: 'updateCssProps',
+    value: function updateCssProps() {
+      if (this.state.mazeArr && this.state.mazeArr.length > 0) {
+        // assumes the maze array is rectangular.
+        var arrRows = this.state.mazeArr.length;
+        var arrCols = this.state.mazeArr[0].length;
+        (0, _mazeDisplay.setGridProps)(arrRows, arrCols);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var len = this.state.mazePath.length;
+      var mazeTitle = this.state.validPath ? 'Solved Maze Grid Here: (Steps required = ' + len + ')' : 'Maze has no valid path from A to B';
+      this.updateCssProps();
+
+      return (0, _mazeDisplay.getMazeGridDisplay)((0, _mazeDisplay.getSolutionMaze)(this.state.mazeArr, this.state.mazeGraph, this.state.mazePath), mazeTitle);
+    }
+  }]);
+
+  return SolveMazeGrid;
+}(_react.Component);
+
+SolveMazeGrid.propTypes = {
+  mazeArray: _propTypes2.default.array.isRequired,
+  mazeGraph: _propTypes2.default.object.isRequired,
+  validPath: _propTypes2.default.boolean,
+  mazePath: _propTypes2.default.array.isRequired
+};
+
+exports.default = SolveMazeGrid;
+
+/***/ }),
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37571,7 +37707,7 @@ var m3 = exports.m3 = "#########################################################
 /* eslint-enable max-len */
 
 /***/ }),
-/* 228 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37680,96 +37816,6 @@ function unregister() {
 
 /* eslint-enable */
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 229 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(1);
-
-var _mazeDisplay = __webpack_require__(90);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var SolveMazeGrid = function (_Component) {
-  _inherits(SolveMazeGrid, _Component);
-
-  function SolveMazeGrid(props) {
-    _classCallCheck(this, SolveMazeGrid);
-
-    // console.log(`>>Inside SolveMazeGrid constructor, props = ${JSON.stringify(props)}`);
-    var _this = _possibleConstructorReturn(this, (SolveMazeGrid.__proto__ || Object.getPrototypeOf(SolveMazeGrid)).call(this, props));
-
-    _this.state = {
-      mazeArr: null,
-      mazeGraph: null,
-      validPath: false,
-      mazePath: []
-    };
-    _this.updateCssProps = _this.updateCssProps.bind(_this);
-    return _this;
-  }
-
-  _createClass(SolveMazeGrid, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.mazeArray !== null) {
-        // console.log(`>>Inside SolveMazeGrid componentWillReceiveProps, nextProps = ${JSON.stringify(nextProps)}`);
-        this.setState({
-          mazeArr: nextProps.mazeArray,
-          mazeGraph: nextProps.mazeGraph,
-          validPath: nextProps.validPath,
-          mazePath: nextProps.mazePath
-        });
-      }
-    }
-  }, {
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
-      if (nextProps.mazePath !== this.state.mazePath) {
-        // console.log(`>>Inside SolveMaze shouldComponentUpdate, nextProps = ${JSON.stringify(nextProps)}`);
-        return true;
-      }
-      return false;
-    }
-  }, {
-    key: 'updateCssProps',
-    value: function updateCssProps() {
-      if (this.state.mazeArr && this.state.mazeArr.length > 0) {
-        // assumes the maze array is rectangular.
-        var arrRows = this.state.mazeArr.length;
-        var arrCols = this.state.mazeArr[0].length;
-        (0, _mazeDisplay.setGridProps)(arrRows, arrCols);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var len = this.state.mazePath.length;
-      var mazeTitle = this.state.validPath ? 'Solved Maze Grid Here: (Steps required = ' + len + ')' : 'Maze has no valid path from A to B';
-      this.updateCssProps();
-
-      return (0, _mazeDisplay.getMazeGridDisplay)((0, _mazeDisplay.getSolutionMaze)(this.state.mazeArr, this.state.mazeGraph, this.state.mazePath), mazeTitle);
-    }
-  }]);
-
-  return SolveMazeGrid;
-}(_react.Component);
-
-exports.default = SolveMazeGrid;
 
 /***/ })
 /******/ ]);

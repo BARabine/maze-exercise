@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { getMazeDisplay } from './maze-display';
 
 class ShowMaze extends Component {
@@ -31,5 +32,9 @@ class ShowMaze extends Component {
     return getMazeDisplay(this.state.mazeArr, 'Show Maze Here:');
   }
 }
+
+ShowMaze.propTypes = {
+  mazeArray: PropTypes.array.isRequired,
+};
 
 export default ShowMaze;
